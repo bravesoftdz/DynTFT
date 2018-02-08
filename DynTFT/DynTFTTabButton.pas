@@ -136,12 +136,12 @@ begin
 
   //lines
   DynTFT_Set_Pen(Col1, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   DynTFT_Set_Pen(Col2, 1);
-  DynTFT_Line(x2, y1, x2, y2); //vert
-  DynTFT_Line(x1, y2, x2, y2); //horiz
+  DynTFT_V_Line(y1, y2, x2); //vert
+  DynTFT_H_Line(x1, x2, y2); //horiz
 
   //draw text
   if ATabButton^.BaseProps.Enabled and CENABLED = CENABLED then

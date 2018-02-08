@@ -53,11 +53,14 @@ procedure TFT_Set_Brush(brush_enabled: Byte; brush_color: TColor; gradient_enabl
 procedure TFT_Set_Font(activeFont: PByte; font_color: TColor; font_orientation: Word);
 procedure TFT_Write_Text(AText: string; x, y: Word);
 procedure TFT_Line(x1, y1, x2, y2: Integer);
+procedure TFT_H_Line(x_start, x_end, y_pos: Integer);
+procedure TFT_V_Line(y_start, y_end, x_pos: Integer);
 procedure TFT_Dot(x, y: Integer; Color: TColor);
 procedure TFT_Fill_Screen(color: TColor);
 procedure TFT_Rectangle(x_upper_left, y_upper_left, x_bottom_right, y_bottom_right: Integer);
 procedure TFT_Circle(x_center, y_center, radius: Integer);
 
+function RGB(R, G, B: Byte): Integer;  //define a function for RGB, to avoid using compiler directives. Since Windows unit is not included, exposing this function will be useful.
 procedure TFT_Color16bitToRGB(color: Word; rgb_red, rgb_green, rgb_blue: PByte; IncreasedBrightness: Boolean = False);
 function TrueColorTo16bitColor(ATrueColor: TColor): Word;
 function U16bitColorToTrueColor(A16bitColor: Word; IncreasedBrightness: Boolean = False): TColor;
@@ -92,10 +95,10 @@ function TFT_RGBToColor16bit(rgb_red, rgb_green, rgb_blue: Byte): Word;
 var
   R, G, B: DWord;
 begin
-  B := rgb_blue and $1F;
-  G := (rgb_green and $2F) shl 5;
-  R := (rgb_red and $1F) shl 11;
-  Result := R + B + G;
+  B := (rgb_blue shr 3) and $1F;
+  G := ((rgb_green shr 2) and $3F) shl 5;
+  R := ((rgb_red shr 3) and $1F) shl 11;
+  Result := R or B or G;
 end;
 
 
@@ -258,6 +261,18 @@ begin
   GCanvas.MoveTo(x1, y1);
   GCanvas.LineTo(x2, y2);
   GCanvas.Pixels[x2, y2] := GCanvas.Pen.Color;  //missing pixel
+end;
+
+
+procedure TFT_H_Line(x_start, x_end, y_pos: Integer);
+begin
+  TFT_Line(x_start, y_pos, x_end, y_pos); //call TFT_Line to get the missing pixel
+end;
+
+
+procedure TFT_V_Line(y_start, y_end, x_pos: Integer);
+begin
+  TFT_Line(x_pos, y_start, x_pos, y_end); //call TFT_Line to get the missing pixel
 end;
 
 

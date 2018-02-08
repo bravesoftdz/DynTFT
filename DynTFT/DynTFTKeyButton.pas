@@ -123,10 +123,10 @@ begin
     
   DynTFT_Set_Pen(ACol, 1);
 
-  DynTFT_Line(x1 + 4, y1 + 3, x1 + 4, y2 - 3); //vert
-  DynTFT_Line(x1 + 4, y1 + 3, x2 - 4, y1 + 3); //horiz
-  DynTFT_Line(x2 - 4, y1 + 3, x2 - 4, y2 - 3); //vert
-  DynTFT_Line(x1 + 4, y2 - 3, x2 - 4, y2 - 3); //horiz
+  DynTFT_V_Line(y1 + 3, y2 - 3, x1 + 4); //vert
+  DynTFT_H_Line(x1 + 4, x2 - 4, y1 + 3); //horiz
+  DynTFT_V_Line(y1 + 3, y2 - 3, x2 - 4); //vert
+  DynTFT_H_Line(x1 + 4, x2 - 4, y2 - 3); //horiz
                                    }
                                    
   if AKeyButton^.BaseProps.CompState and CPRESSED = CPRESSED then
@@ -142,12 +142,12 @@ begin
 
   //border lines
   DynTFT_Set_Pen(Col1, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   DynTFT_Set_Pen(Col2, 1);
-  DynTFT_Line(x2, y1, x2, y2); //vert
-  DynTFT_Line(x1, y2, x2, y2); //horiz
+  DynTFT_V_Line(y1, y2, x2); //vert
+  DynTFT_H_Line(x1, x2, y2); //horiz
 
   //draw text
   if AKeyButton^.BaseProps.Enabled and CENABLED = CENABLED then

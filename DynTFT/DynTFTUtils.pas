@@ -125,6 +125,8 @@ procedure DynTFT_Set_Brush(brush_enabled: Byte; brush_color: TColor; gradient_en
 procedure DynTFT_Set_Font(activeFont: PByte; font_color: TColor; font_orientation: Word);
 procedure DynTFT_Write_Text({$IFDEF IsMCU} var {$ENDIF} AText: string; x, y: Word);
 procedure DynTFT_Line(x1, y1, x2, y2: Integer);
+procedure DynTFT_H_Line(x_start, x_end, y_pos: Integer);
+procedure DynTFT_V_Line(y_start, y_end, x_pos: Integer);
 procedure DynTFT_Dot(x, y: Integer; Color: TColor);
 procedure DynTFT_Fill_Screen(color: TColor);
 procedure DynTFT_Rectangle(x_upper_left, y_upper_left, x_bottom_right, y_bottom_right: Integer);
@@ -268,6 +270,18 @@ implementation
   end;
 
 
+  procedure DynTFT_H_Line(x_start, x_end, y_pos: Integer);
+  begin
+    TFT_H_Line(x_start, x_end, y_pos);
+  end;
+
+
+  procedure DynTFT_V_Line(y_start, y_end, x_pos: Integer);
+  begin
+    TFT_V_Line(y_start, y_end, x_pos);
+  end;
+
+
   procedure DynTFT_Dot(x, y: Integer; Color: TColor);
   begin
     TFT_Dot(x, y, Color);
@@ -298,6 +312,9 @@ implementation
     procedure GetTextWidthAndHeight(var AText: string; var Width, Height: Word);
   {$ENDIF}
     begin
+      {$IFDEF IsDesktop}
+        TFT_Set_Font(@TFT_defaultFont, GCanvas.Font.Color, 0);
+      {$ENDIF}
       TFT_Write_Text_Return_Pos(AText, 0, 0);
 
       Width := caption_length;

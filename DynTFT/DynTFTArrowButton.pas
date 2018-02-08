@@ -181,12 +181,12 @@ begin
 
   //border lines
   DynTFT_Set_Pen(Col1, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   DynTFT_Set_Pen(Col2, 1);
-  DynTFT_Line(x2, y1, x2, y2); //vert
-  DynTFT_Line(x1, y2, x2, y2); //horiz
+  DynTFT_V_Line(y1, y2, x2); //vert
+  DynTFT_H_Line(x1, x2, y2); //horiz
 
   //set arrow size
   XRef := x1 + HalfWidth - CHalfArrowSize;
@@ -217,18 +217,18 @@ begin
   else
     DynTFT_Set_Pen(AArrowButton^.Color, 1);
 
-  DynTFT_Line(x1 + 4, y1 + 3, x1 + 4, y2 - 3); //vert
-  DynTFT_Line(x1 + 4, y1 + 3, x2 - 4, y1 + 3); //horiz
-  DynTFT_Line(x2 - 4, y1 + 3, x2 - 4, y2 - 3); //vert
-  DynTFT_Line(x1 + 4, y2 - 3, x2 - 4, y2 - 3); //horiz
+  DynTFT_V_Line(y1 + 3, y2 - 3, x1 + 4); //vert
+  DynTFT_H_Line(x1 + 4, x2 - 4, y1 + 3); //horiz
+  DynTFT_V_Line(y1 + 3, y2 - 3, x2 - 4); //vert
+  DynTFT_H_Line(x1 + 4, x2 - 4, y2 - 3); //horiz
 
   //draw arrow
   PressOffset := DynTFTOrdBoolWord(Pressed);
   
   if AArrowButton^.BaseProps.Enabled and CENABLED = CDISABLED then
-    DynTFT_Set_Pen(CL_DynTFTButton_DisabledArrow, 1)
+    DynTFT_Set_Pen(CL_DynTFTArrowButton_DisabledArrow, 1)
   else
-    DynTFT_Set_Pen(CL_DynTFTButton_EnabledArrow, 1);
+    DynTFT_Set_Pen(CL_DynTFTArrowButton_EnabledArrow, 1);
     
   DrawArrow(XRef + PressOffset, YRef + PressOffset, AArrowButton^.ArrowDir);
 end;

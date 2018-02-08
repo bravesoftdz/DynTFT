@@ -29,7 +29,7 @@ unit DynTFTSimScreenForm;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Controls, Forms,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ComCtrls, ExtCtrls;
 
 type
@@ -125,8 +125,6 @@ procedure TfrmDynTFTSimScreen.tmrStartupTimer(Sender: TObject);
 begin
   tmrStartup.Enabled := False;
 
-  GCanvas := frmDynTFTSimScreen.imgScreen.Canvas;
-  
   imgScreen.Picture.Bitmap := TBitmap.Create;
   imgScreen.Picture.Bitmap.Width := imgScreen.Width;
   imgScreen.Picture.Bitmap.Height := imgScreen.Height;
@@ -148,6 +146,8 @@ begin
 
   lblWidth.Left := trbScreenWidth.Position + imgScreen.Left;
   lblHeight.Top := trbScreenHeight.Position + imgScreen.Top;
+
+  GCanvas := frmDynTFTSimScreen.imgScreen.Canvas;
 end;
 
 

@@ -117,10 +117,10 @@ begin
     y2 := y1 + AListBox^.BaseProps.Height;
 
     DynTFT_Set_Pen(CL_DynTFTListBox_Border, 1);
-    DynTFT_Line(x1, y1, x2, y1);
-    DynTFT_Line(x1, y2, x2, y2);
-    DynTFT_Line(x1, y1, x1, y2);
-    DynTFT_Line(x2, y1, x2, y2);
+    DynTFT_H_Line(x1, x2, y1);
+    DynTFT_H_Line(x1, x2, y2);
+    DynTFT_V_Line(y1, y2, x1);
+    DynTFT_V_Line(y1, y2, x2);
 
     //DrawScrollBar(AListBox^.VertScrollBar, FullRedraw, True);
     //DrawItems(AListBox^.Items, FullRedraw);

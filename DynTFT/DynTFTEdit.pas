@@ -345,7 +345,7 @@ begin
     y1 := APDynTFTEdit^.BaseProps.Top + 2;
     y2 := APDynTFTEdit^.BaseProps.Top + APDynTFTEdit^.BaseProps.Height - 2;
 
-    DynTFT_Line(x, y1, x, y2);
+    DynTFT_V_Line(y1, y2, x);
   end;
 end;
 

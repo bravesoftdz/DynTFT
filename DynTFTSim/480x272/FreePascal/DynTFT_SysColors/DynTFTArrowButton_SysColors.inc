@@ -31,5 +31,5 @@ CL_DynTFTArrowButton_LightEdge = CL_WHITE;
 CL_DynTFTArrowButton_DarkEdge = CL_GRAY;
 CL_DynTFTArrowButton_FocusRectangle = CL_GRAY;
 CL_DynTFTArrowButton_Background = CL_LIGHTBLUE;
-CL_DynTFTButton_EnabledArrow = CL_GRAY;
-CL_DynTFTButton_DisabledArrow = CL_MEDGRAY;
+CL_DynTFTArrowButton_EnabledArrow = CL_GRAY;
+CL_DynTFTArrowButton_DisabledArrow = CL_MEDGRAY;

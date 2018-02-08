@@ -1,0 +1,3 @@
+This example is not meant to be compiled for microcontroller (although compilable), because it displays multiple components on an unsized/unconstrained screen, bigger than 480x272 (or even other bigger formats).
+It shows creation/destruction, enabling/disabling, showing/hiding of some components. It also presents usage of various component properties and/or internal utility procedures/functions.
+This example also presents how to destroy a "generic" type component with its real "destructor" (see SelfDestroy_OnMouseUpUser handler, where a button is pointed by a PPtrRec type parameter and destroyed using DynTFTButton_DestroyAndPaint).

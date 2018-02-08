@@ -107,6 +107,7 @@ procedure DynTFTBlinkCaretsForScreenComponents(ScreenIndex: Byte);
 procedure DynTFTProcessComponentVisualState(ScreenIndex: Byte);
 
 procedure DynTFTRepaintScreenComponents(ScreenIndex: Byte; PaintOptions: TPtr; ComponentAreaOnly: PDynTFTBaseComponent);
+procedure DynTFTRepaintScreen(ScreenIndex: Byte; PaintOptions: TPtr; ComponentAreaOnly: PDynTFTBaseComponent);
 
 
 procedure DynTFTShowComponent(AComp: PDynTFTBaseComponent);
@@ -525,6 +526,17 @@ end;
     {$IFDEF RTTIREG}
       Dispose(ABaseEventReg.CompCreate);
       Dispose(ABaseEventReg.CompDestroy);
+    {$ENDIF}
+
+    ABaseEventReg.MouseDownEvent := nil;
+    ABaseEventReg.MouseMoveEvent := nil;
+    ABaseEventReg.MouseUpEvent := nil;
+    ABaseEventReg.Repaint := nil;
+    ABaseEventReg.BlinkCaretState := nil;
+
+    {$IFDEF RTTIREG}
+      ABaseEventReg.CompCreate := nil;
+      ABaseEventReg.CompDestroy := nil;
     {$ENDIF}
   end;
 {$ENDIF}
@@ -1133,6 +1145,14 @@ var
   ParentComponent: PDynTFTComponent;
   ABase: PDynTFTBaseComponent;
 begin
+  {$IFDEF IsDesktop}
+    if DynTFTAllComponentsContainer[ScreenIndex].ScreenContainer = nil then
+    begin
+      DynTFT_DebugConsole('DynTFT is not initialized. Make sure the simulation is running. It should have called DynTFT_GUI_Start on start.');
+      Exit;
+    end;
+  {$ENDIF}
+
   ParentComponent := DynTFTAllComponentsContainer[ScreenIndex].ScreenContainer;
   ParentComponent := PDynTFTComponent(TPtrRec(ParentComponent^.NextSibling));
 
@@ -1154,6 +1174,24 @@ begin
     SetComponentVisualState(ABase);  
     ParentComponent := PDynTFTComponent(TPtrRec(ParentComponent^.NextSibling));
   until ParentComponent = nil;                                                         
+end;
+
+
+procedure DynTFTRepaintScreen(ScreenIndex: Byte; PaintOptions: TPtr; ComponentAreaOnly: PDynTFTBaseComponent);
+begin
+  {$IFDEF IsDesktop}
+    if DynTFTAllComponentsContainer[ScreenIndex].ScreenContainer = nil then
+    begin
+      DynTFT_DebugConsole('DynTFT is not initialized. Make sure the simulation is running. It should have called DynTFT_GUI_Start on start.');
+      Exit;
+    end;
+  {$ENDIF}
+
+  DynTFT_Set_Pen(DynTFTAllComponentsContainer[ScreenIndex].ScreenColor, 1);
+  DynTFT_Set_Brush(1, DynTFTAllComponentsContainer[ScreenIndex].ScreenColor, 0, 0, 0, 0);
+
+  DynTFT_Rectangle(0, 0, TFT_DISP_WIDTH, TFT_DISP_HEIGHT);
+  DynTFTRepaintScreenComponents(ScreenIndex, PaintOptions, ComponentAreaOnly);
 end;
 
 
@@ -1181,5 +1219,13 @@ begin
     Result := 0;
 end;
 
+
+{$IFDEF IsDesktop}
+var
+  iii: Integer;
+begin
+  for iii := 0 to CDynTFTMaxComponentsContainer - 1 do
+    DynTFTAllComponentsContainer[iii].ScreenContainer := nil;
+{$ENDIF}
 
 end.

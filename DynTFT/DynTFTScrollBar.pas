@@ -85,7 +85,8 @@ type
   end;
   PDynTFTScrollBar = ^TDynTFTScrollBar;
 
-procedure DynTFTDrawScrollBar(AScrollBar: PDynTFTScrollBar; FullRedraw, RedrawButtons: Boolean);
+procedure DynTFTDrawScrollBar(AScrollBar: PDynTFTScrollBar; FullRedraw: Boolean);
+procedure DynTFTDrawScrollBarWithButtons(AScrollBar: PDynTFTScrollBar; FullRedraw, RedrawButtons: Boolean);
 function DynTFTScrollBar_CreateWithDir(ScreenIndex: Byte; Left, Top, Width, Height: TSInt; ScrDir: Byte): PDynTFTScrollBar;
 function DynTFTScrollBar_Create(ScreenIndex: Byte; Left, Top, Width, Height: TSInt): PDynTFTScrollBar;
 procedure DynTFTScrollBar_Destroy(var AScrollBar: PDynTFTScrollBar);
@@ -112,7 +113,7 @@ end;
 
 function ScrBarPosToPnlPos(ScrBar: PDynTFTScrollBar): Word;
 var
-  TotalPanelSpace: Word;
+  TotalPanelSpace: TSInt;
   TotalPositionSpace: LongInt;
 begin
   if ScrBar^.Direction = CScrollBarHorizDir then
@@ -135,7 +136,7 @@ end;
 
 function PnlPosToScrBarPos(ScrBar: PDynTFTScrollBar; PnlPos: LongInt): LongInt;
 var
-  TotalPanelSpace: Word;
+  TotalPanelSpace: TSInt;
   TotalPositionSpace: LongInt;
 begin
   if ScrBar^.Direction = CScrollBarHorizDir then
@@ -162,7 +163,7 @@ begin
 end;
 
 
-procedure DynTFTDrawScrollBar(AScrollBar: PDynTFTScrollBar; FullRedraw, RedrawButtons: Boolean);
+procedure DynTFTDrawScrollBarWithButtons(AScrollBar: PDynTFTScrollBar; FullRedraw, RedrawButtons: Boolean);
 var
   BkCol: TColor;
   x1, y1, x2, y2: TSInt;
@@ -181,6 +182,9 @@ begin
       BkCol := CL_DynTFTScrollBar_DisabledBackground
     else
       BkCol := CL_DynTFTScrollBar_EnabledBackground;
+
+    DynTFT_Set_Pen(BkCol, 1);
+    DynTFT_Set_Brush(1, BkCol, 0, 0, 0, 0);
 
     if AScrollBar^.Direction = CScrollBarHorizDir then
     begin
@@ -201,8 +205,6 @@ begin
       AScrollBar^.PnlScroll^.BaseProps.Width := CScrollBarArrBtnWidthHeight;
       AScrollBar^.PnlScroll^.BaseProps.Height := AScrollBar^.BaseProps.Height;
 
-      DynTFT_Set_Pen(BkCol, 1);
-      DynTFT_Set_Brush(1, BkCol, 0, 0, 0, 0);
       DynTFT_Rectangle(x1 + CScrollBarArrBtnWidthHeight + 1, y1, x2 - CScrollBarArrBtnWidthHeight - 1, y2);
     end
     else
@@ -224,8 +226,6 @@ begin
       AScrollBar^.PnlScroll^.BaseProps.Width := AScrollBar^.BaseProps.Width;
       AScrollBar^.PnlScroll^.BaseProps.Height := CScrollBarArrBtnWidthHeight;
 
-      DynTFT_Set_Pen(BkCol, 1);
-      DynTFT_Set_Brush(1, BkCol, 0, 0, 0, 0);
       DynTFT_Rectangle(x1, y1 + CScrollBarArrBtnWidthHeight + 1, x2, y2 - CScrollBarArrBtnWidthHeight - 1);
     end;
   end;
@@ -241,14 +241,20 @@ begin
 end;
 
 
+procedure DynTFTDrawScrollBar(AScrollBar: PDynTFTScrollBar; FullRedraw: Boolean);
+begin
+  DynTFTDrawScrollBarWithButtons(AScrollBar, FullRedraw, FullRedraw);
+end;
+
+
 procedure DynTFTEnableScrollBar(AScrollBar: PDynTFTScrollBar);
 begin
   AScrollBar^.BaseProps.Enabled := CENABLED;
   AScrollBar^.PnlScroll^.BaseProps.Enabled := CENABLED;
-  AScrollBar^.PnlScroll^.Color := CL_SILVER;
+  AScrollBar^.PnlScroll^.Color := CL_DynTFTScrollBar_PanelBackground;
   AScrollBar^.BtnInc^.BaseProps.Enabled := CENABLED;
   AScrollBar^.BtnDec^.BaseProps.Enabled := CENABLED;
-  DynTFTDrawScrollBar(AScrollBar, False, True);
+  DynTFTDrawScrollBarWithButtons(AScrollBar, False, True);
 end;
 
 
@@ -256,10 +262,10 @@ procedure DynTFTDisableScrollBar(AScrollBar: PDynTFTScrollBar);
 begin
   AScrollBar^.BaseProps.Enabled := CDISABLED;
   AScrollBar^.PnlScroll^.BaseProps.Enabled := CDISABLED;
-  AScrollBar^.PnlScroll^.Color := CL_LIGHTBLUE;
+  AScrollBar^.PnlScroll^.Color := CL_DynTFTScrollBar_DisabledBackground;
   AScrollBar^.BtnInc^.BaseProps.Enabled := CDISABLED;
   AScrollBar^.BtnDec^.BaseProps.Enabled := CDISABLED;
-  DynTFTDrawScrollBar(AScrollBar, False, True);
+  DynTFTDrawScrollBarWithButtons(AScrollBar, False, True);
 end;
 
 
@@ -331,7 +337,7 @@ begin
       begin
         AScrBar^.OldPosition := AScrBar^.Position;
 
-        DynTFTDrawScrollBar(AScrBar, True, False); ///draw only if changed
+        DynTFTDrawScrollBarWithButtons(AScrBar, True, False); ///draw only if changed
         {$IFDEF IsDesktop}
           if Assigned(AScrBar^.OnScrollBarChange) then
             if Assigned(AScrBar^.OnScrollBarChange^) then
@@ -392,7 +398,7 @@ begin
         AScrBar^.Position := AScrBar^.Max
       else
       begin
-        DynTFTDrawScrollBar(AScrBar, True, False); //draw only if changed
+        DynTFTDrawScrollBarWithButtons(AScrBar, True, False); //draw only if changed
         {$IFDEF IsDesktop}
           if Assigned(AScrBar^.OnScrollBarChange) then
             if Assigned(AScrBar^.OnScrollBarChange^) then
@@ -410,7 +416,7 @@ begin
         AScrBar^.Position := AScrBar^.Min
       else
       begin
-        DynTFTDrawScrollBar(AScrBar, True, False); //draw only if changed
+        DynTFTDrawScrollBarWithButtons(AScrBar, True, False); //draw only if changed
         {$IFDEF IsDesktop}
           if Assigned(AScrBar^.OnScrollBarChange) then
             if Assigned(AScrBar^.OnScrollBarChange^) then
@@ -467,7 +473,7 @@ begin
   Result^.BtnInc := DynTFTArrowButton_Create(ScreenIndex, 500, 280, 0, 0);   //Button dimensions are set to 0, to avoid drawing until properly positioned.
   Result^.BtnDec := DynTFTArrowButton_Create(ScreenIndex, 500, 280, 0, 0);
   Result^.PnlScroll := DynTFTPanel_Create(ScreenIndex, 500, 280, 0, 0);
-  Result^.PnlScroll^.Color := CL_SILVER;
+  Result^.PnlScroll^.Color := CL_DynTFTScrollBar_PanelBackground;
 
   {$IFDEF IsDesktop}
     New(Result^.OnOwnerInternalMouseDown);
@@ -687,7 +693,7 @@ begin
     Exit;
   end;
 
-  DynTFTDrawScrollBar(PDynTFTScrollBar(TPtrRec(ABase)), FullRepaint, FullRepaint);
+  DynTFTDrawScrollBarWithButtons(PDynTFTScrollBar(TPtrRec(ABase)), FullRepaint, FullRepaint);
 end;
                                
 

@@ -129,12 +129,12 @@ begin
     x2 := x2 - 2;
     y2 := y2 - 2;
 
-    DynTFT_Line(x1, y1, x1 + 5, y1);
-    DynTFT_Line(x1 + 10 + TSInt(TextWidth), y1, x2, y1);
+    DynTFT_H_Line(x1, x1 + 5, y1);
+    DynTFT_H_Line(x1 + 10 + TSInt(TextWidth), x2, y1);
 
-    DynTFT_Line(x1, y1, x1, y2);
-    DynTFT_Line(x2, y1, x2, y2);
-    DynTFT_Line(x1, y2, x2, y2);
+    DynTFT_V_Line(y1, y2, x1);
+    DynTFT_V_Line(y1, y2, x2);
+    DynTFT_H_Line(x1, x2, y2);
   end
   else
   begin
@@ -229,8 +229,8 @@ begin
   for i := 0 to CMaxRadioGroupButtonCount - 1 do
     Result^.Buttons[i] := nil;
 
-  Result^.Color := CL_LIGHTBLUE;
-  Result^.Font_Color := CL_BLACK;
+  Result^.Color := CL_DynTFTRadioGroup_Background;
+  Result^.Font_Color := CL_DynTFTRadioGroup_EnabledFont;
   Result^.Caption := '';
 end;
 

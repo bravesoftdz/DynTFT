@@ -29,3 +29,4 @@
 
 CL_DynTFTScrollBar_EnabledBackground = CL_LIGHTBLUE;
 CL_DynTFTScrollBar_DisabledBackground = CL_LIGHTGRAY;
+CL_DynTFTScrollBar_PanelBackground = CL_SILVER;

@@ -91,15 +91,16 @@ const
   {$ENDIF}
 
 
-  {$IFDEF IncludeUserColors}
+  //{$IFDEF IncludeUserColors}
     {$I UserColors.inc}
-  {$ENDIF}
+  //{$ENDIF}
 
   {$IFNDEF ExcludeDynTFTSysColors}
     //Replace the content of DynTFTColorTheme.inc file with your color theme.
     {$I DynTFTColorTheme.inc}
   {$ENDIF}
-                                             
+
+const                                             
   //constants from Windows unit (Delphi)
   VK_BACK = 8;     //backspace
   VK_TAB = 9;

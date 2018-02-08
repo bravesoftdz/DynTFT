@@ -147,27 +147,27 @@ begin
   //Focus rectangle  
   Dec(y3);
   DynTFT_Set_Pen(BkCol, 1);
-  DynTFT_Line(x2 + 2, y1, x2 + 2, y3); //vert
-  DynTFT_Line(x2 + 2, y1, x3 - 2, y1); //horiz
-  DynTFT_Line(x3 - 2, y1, x3 - 2, y3); //vert
-  DynTFT_Line(x2 + 2, y3, x3 - 2, y3); //horiz
+  DynTFT_V_Line(y1, y3, x2 + 2); //vert
+  DynTFT_H_Line(x2 + 2, x3 - 2, y1); //horiz
+  DynTFT_V_Line(y1, y3, x3 - 2); //vert
+  DynTFT_H_Line(x2 + 2, x3 - 2, y3); //horiz
 
   //tickbox lines
   DynTFT_Set_Pen(CL_DynTFTCheckBox_DarkEdge, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   DynTFT_Set_Pen(CL_DynTFTCheckBox_LightEdge, 1);
-  DynTFT_Line(x2, y1, x2, y2); //vert
-  DynTFT_Line(x1, y2, x2, y2); //horiz
+  DynTFT_V_Line(y1, y2, x2); //vert
+  DynTFT_H_Line(x1, x2, y2); //horiz
 
   Inc(x1);
   Dec(x2);
   Inc(y1);
   Dec(y2);
   DynTFT_Set_Pen(CL_DynTFTCheckBox_DarkDarkEdge, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   x1 := ACheckBox^.BaseProps.Left;
   y1 := ACheckBox^.BaseProps.Top;
@@ -179,8 +179,8 @@ begin
   Inc(y1);
   Dec(y2);
   DynTFT_Set_Pen(CL_DynTFTCheckBox_LightDarkEdge, 1);
-  DynTFT_Line(x2, y1, x2, y2); //vert
-  DynTFT_Line(x1, y2, x2, y2); //horiz
+  DynTFT_V_Line(y1, y2, x2); //vert
+  DynTFT_H_Line(x1, x2, y2); //horiz
 
   //tick
   DrawTick(ACheckBox, BoxColor);

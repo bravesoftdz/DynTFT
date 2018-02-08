@@ -41,7 +41,7 @@ uses
   DynTFTButton, DynTFTArrowButton, DynTFTPanel, DynTFTCheckBox, DynTFTScrollBar,
   DynTFTItems, DynTFTListBox, DynTFTLabel, DynTFTRadioButton, DynTFTRadioGroup,
   DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTKeyButton,
-  DynTFTVirtualKeyboard, DynTFTComboBox
+  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar
 
   {$IFDEF IsDesktop}
     ,SysUtils, TFT
@@ -76,6 +76,8 @@ begin
   DynTFTRegisterKeyButtonEvents;            {$IFDEF IsDesktop}DynTFT_DebugConsole('KeyButton type: ' + IntToStr(DynTFTGetKeyButtonComponentType));{$ENDIF}
   DynTFTRegisterVirtualKeyboardEvents;      {$IFDEF IsDesktop}DynTFT_DebugConsole('VirtualKeyboard type: ' + IntToStr(DynTFTGetVirtualKeyboardComponentType));{$ENDIF}
   DynTFTRegisterComboBoxEvents;             {$IFDEF IsDesktop}DynTFT_DebugConsole('ComboBox type: ' + IntToStr(DynTFTGetComboBoxComponentType));{$ENDIF}
+  DynTFTRegisterTrackBarEvents;             {$IFDEF IsDesktop}DynTFT_DebugConsole('TrackBar type: ' + IntToStr(DynTFTGetTrackBarComponentType));{$ENDIF}
+  DynTFTRegisterProgressBarEvents;          {$IFDEF IsDesktop}DynTFT_DebugConsole('ProgressBar type: ' + IntToStr(DynTFTGetProgressBarComponentType));{$ENDIF}
 end;
 
 
@@ -103,27 +105,27 @@ begin
   DynTFTAllComponentsContainer[19].Active := False;
   DynTFTAllComponentsContainer[20].Active := False;
 
-  DynTFTAllComponentsContainer[0].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[1].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[2].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[3].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[4].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[5].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[6].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[7].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[8].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[9].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[10].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[11].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[12].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[13].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[14].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[15].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[16].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[17].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[18].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[19].ScreenColor := CL_WHITE;
-  DynTFTAllComponentsContainer[20].ScreenColor := CL_WHITE;
+  DynTFTAllComponentsContainer[0].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[1].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[2].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[3].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[4].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[5].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[6].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[7].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[8].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[9].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[10].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[11].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[12].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[13].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[14].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[15].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[16].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[17].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[18].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[19].ScreenColor := CL_DynTFTScreen_Background;
+  DynTFTAllComponentsContainer[20].ScreenColor := CL_DynTFTScreen_Background;
 
   DynTFT_Set_Pen(DynTFTAllComponentsContainer[1].ScreenColor, 1);
   DynTFT_Set_Brush(1, DynTFTAllComponentsContainer[1].ScreenColor, 0, 0, 0, 0);
@@ -181,6 +183,15 @@ begin
   {$ENDIF}
   DynTFTAddTabButtonToPageControl(PageControl1, tabbtnTab5);
 
+  tabbtnTab6 := DynTFTTabButton_Create(0, 230, 0, 45, 20);  //Screen: 0
+  tabbtnTab6^.Caption := 'Tab6';
+  {$IFDEF IsDesktop}
+    tabbtnTab6^.BaseProps.OnMouseDownUser^ := SwitchScreen_OnMouseDownUser;
+  {$ELSE}
+    tabbtnTab6^.BaseProps.OnMouseDownUser := @SwitchScreen_OnMouseDownUser;
+  {$ENDIF}
+  DynTFTAddTabButtonToPageControl(PageControl1, tabbtnTab6);
+
 
 end;
 
@@ -189,49 +200,49 @@ procedure CreateGUI_Screen_1;
 begin
   btn1 := DynTFTButton_Create(1, 9, 29, 75, 33);  //Screen: 1
   btn1^.Caption := 'Button 1';
-  btn1^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  btn1^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
   Arrow1 := DynTFTArrowButton_CreateWithArrow(1, 97, 34, 20, 20, CLeftArrow);  //Screen: 1
-  Arrow1^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  Arrow1^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
   Panel1 := DynTFTPanel_Create(1, 65, 69, 194, 82);  //Screen: 1
   Panel1^.Caption := 'Panel 1';
-  Panel1^.Color := {$IFDEF IsDesktop} $006FAD6F {$ELSE} $7DAF {$ENDIF};
+  Panel1^.Color := {$IFDEF IsDesktop} $006FAD6F {$ELSE} $6D6D {$ENDIF};
   Panel1^.Font_Color := CL_BLACK;
 
   Arrow2 := DynTFTArrowButton_CreateWithArrow(1, 121, 34, 20, 20, CRightArrow);  //Screen: 1
-  Arrow2^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  Arrow2^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
   Arrow3 := DynTFTArrowButton_CreateWithArrow(1, 185, 34, 20, 20, CUpArrow);  //Screen: 1
-  Arrow3^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  Arrow3^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
   Arrow4 := DynTFTArrowButton_CreateWithArrow(1, 209, 34, 20, 20, CDownArrow);  //Screen: 1
-  Arrow4^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  Arrow4^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
   btn3 := DynTFTButton_Create(1, 89, 165, 148, 25);  //Screen: 1
   btn3^.Caption := 'Disabled Button 3';
-  btn3^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  btn3^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
   btn3^.BaseProps.Enabled := 0;
 
   Arrow5 := DynTFTArrowButton_CreateWithArrow(1, 17, 157, 32, 36, CUpArrow);  //Screen: 1
-  Arrow5^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $94C0 {$ENDIF};
+  Arrow5^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $3734 {$ENDIF};
 
   Arrow6 := DynTFTArrowButton_CreateWithArrow(1, 17, 197, 32, 36, CDownArrow);  //Screen: 1
-  Arrow6^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $94C0 {$ENDIF};
+  Arrow6^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $3734 {$ENDIF};
 
   Arrow7 := DynTFTArrowButton_CreateWithArrow(1, 281, 157, 32, 36, CLeftArrow);  //Screen: 1
-  Arrow7^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $94C0 {$ENDIF};
+  Arrow7^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $3734 {$ENDIF};
 
   Arrow8 := DynTFTArrowButton_CreateWithArrow(1, 281, 197, 32, 36, CRightArrow);  //Screen: 1
-  Arrow8^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $94C0 {$ENDIF};
+  Arrow8^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $3734 {$ENDIF};
 
   btn2 := DynTFTButton_Create(1, 241, 29, 75, 33);  //Screen: 1
   btn2^.Caption := 'Button 2';
-  btn2^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  btn2^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
   btn4 := DynTFTButton_Create(1, 89, 205, 148, 25);  //Screen: 1
   btn4^.Caption := 'Disabled Button 4';
-  btn4^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $5DAF {$ENDIF};
+  btn4^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
   btn4^.BaseProps.Enabled := 0;
 
 end;
@@ -253,48 +264,64 @@ begin
 
   CheckBox1 := DynTFTCheckBox_Create(2, 25, 29, 110, 21);  //Screen: 2
   CheckBox1^.Caption := 'CheckBox 1';
-  CheckBox1^.Color := {$IFDEF IsDesktop} $00BE8296 {$ELSE} $B05E {$ENDIF};
+  CheckBox1^.Color := {$IFDEF IsDesktop} $00BE8296 {$ELSE} $9417 {$ENDIF};
   CheckBox1^.Font_Color := CL_BLACK;
 
   CheckBox2 := DynTFTCheckBox_Create(2, 25, 61, 110, 21);  //Screen: 2
   CheckBox2^.Caption := 'CheckBox 2';
-  CheckBox2^.Color := {$IFDEF IsDesktop} $00BE8296 {$ELSE} $B05E {$ENDIF};
+  CheckBox2^.Color := {$IFDEF IsDesktop} $00BE8296 {$ELSE} $9417 {$ENDIF};
   CheckBox2^.Font_Color := CL_BLACK;
 
   CheckBox3 := DynTFTCheckBox_Create(2, 153, 29, 110, 21);  //Screen: 2
   CheckBox3^.Caption := 'CheckBox 3';
-  CheckBox3^.Color := {$IFDEF IsDesktop} $00BE8296 {$ELSE} $B05E {$ENDIF};
+  CheckBox3^.Color := {$IFDEF IsDesktop} $00BE8296 {$ELSE} $9417 {$ENDIF};
   CheckBox3^.Font_Color := CL_BLACK;
   CheckBox3^.BaseProps.Enabled := 0;
 
   ListBox1 := DynTFTListBox_Create(2, 25, 85, 100, 112);  //Screen: 2
   ListBox1^.Items^.Count := 10;
-  ListBox1^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00FAAFBE {$ELSE} $F5FA {$ENDIF};
+  ListBox1^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00FAAFBE {$ELSE} $BD7F {$ENDIF};
   DynTFTUpdateScrollbarEventHandlers(ListBox1^.VertScrollBar);
-  ListBox1^.Items^.Strings[0] := 'one';
-  ListBox1^.Items^.Strings[1] := 'two';
-  ListBox1^.Items^.Strings[2] := 'three';
-  ListBox1^.Items^.Strings[3] := 'four';
-  ListBox1^.Items^.Strings[4] := 'five';
-  ListBox1^.Items^.Strings[5] := 'six';
-  ListBox1^.Items^.Strings[6] := 'seven';
-  ListBox1^.Items^.Strings[7] := 'eight';
-  ListBox1^.Items^.Strings[8] := 'nine';
-  ListBox1^.Items^.Strings[9] := 'ten';
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ListBox1^.Items^.OnGetItem^ := ListBoxItemsGetItemText;
+    {$ELSE}
+      ListBox1^.Items^.OnGetItem := @ListBoxItemsGetItemText;
+    {$ENDIF}
+  {$ELSE}
+    ListBox1^.Items^.Strings[0] := 'one';
+    ListBox1^.Items^.Strings[1] := 'two';
+    ListBox1^.Items^.Strings[2] := 'three';
+    ListBox1^.Items^.Strings[3] := 'four';
+    ListBox1^.Items^.Strings[4] := 'five';
+    ListBox1^.Items^.Strings[5] := 'six';
+    ListBox1^.Items^.Strings[6] := 'seven';
+    ListBox1^.Items^.Strings[7] := 'eight';
+    ListBox1^.Items^.Strings[8] := 'nine';
+    ListBox1^.Items^.Strings[9] := 'ten';
+  {$ENDIF}
 
   ListBox3 := DynTFTListBox_Create(2, 153, 85, 100, 112);  //Screen: 2
   ListBox3^.Items^.Count := 10;
   DynTFTUpdateScrollbarEventHandlers(ListBox3^.VertScrollBar);
-  ListBox3^.Items^.Strings[0] := 'one';
-  ListBox3^.Items^.Strings[1] := 'two';
-  ListBox3^.Items^.Strings[2] := 'three';
-  ListBox3^.Items^.Strings[3] := 'four';
-  ListBox3^.Items^.Strings[4] := 'five';
-  ListBox3^.Items^.Strings[5] := 'six';
-  ListBox3^.Items^.Strings[6] := 'seven';
-  ListBox3^.Items^.Strings[7] := 'eight';
-  ListBox3^.Items^.Strings[8] := 'nine';
-  ListBox3^.Items^.Strings[9] := 'ten';
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ListBox3^.Items^.OnGetItem^ := ListBoxItemsGetItemText;
+    {$ELSE}
+      ListBox3^.Items^.OnGetItem := @ListBoxItemsGetItemText;
+    {$ENDIF}
+  {$ELSE}
+    ListBox3^.Items^.Strings[0] := 'one';
+    ListBox3^.Items^.Strings[1] := 'two';
+    ListBox3^.Items^.Strings[2] := 'three';
+    ListBox3^.Items^.Strings[3] := 'four';
+    ListBox3^.Items^.Strings[4] := 'five';
+    ListBox3^.Items^.Strings[5] := 'six';
+    ListBox3^.Items^.Strings[6] := 'seven';
+    ListBox3^.Items^.Strings[7] := 'eight';
+    ListBox3^.Items^.Strings[8] := 'nine';
+    ListBox3^.Items^.Strings[9] := 'ten';
+  {$ENDIF}
 
 end;
 
@@ -303,12 +330,12 @@ procedure CreateGUI_Screen_3;
 begin
   lbl1 := DynTFTLabel_Create(3, 9, 29, 60, 17);  //Screen: 3
   lbl1^.Caption := 'Label 1';
-  lbl1^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $105A {$ENDIF};
+  lbl1^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $841F {$ENDIF};
   lbl1^.Font_Color := CL_BLACK;
 
   lbl2 := DynTFTLabel_Create(3, 89, 29, 60, 17);  //Screen: 3
   lbl2^.Caption := 'Label 2';
-  lbl2^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $105A {$ENDIF};
+  lbl2^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $841F {$ENDIF};
   lbl2^.Font_Color := CL_BLACK;
 
   rdgrpTest := DynTFTRadioGroup_Create(3, 9, 69, 136, 145);  //Screen: 3
@@ -351,12 +378,12 @@ begin
 
   lbl3 := DynTFTLabel_Create(3, 169, 29, 60, 17);  //Screen: 3
   lbl3^.Caption := 'Label 3';
-  lbl3^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $105A {$ENDIF};
+  lbl3^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $841F {$ENDIF};
   lbl3^.Font_Color := CL_BLACK;
 
   lbl4 := DynTFTLabel_Create(3, 249, 29, 60, 17);  //Screen: 3
   lbl4^.Caption := 'Label 4';
-  lbl4^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $105A {$ENDIF};
+  lbl4^.Color := {$IFDEF IsDesktop} $00FA8282 {$ELSE} $841F {$ENDIF};
   lbl4^.Font_Color := CL_BLACK;
 
   rdgrpTest1 := DynTFTRadioGroup_Create(3, 177, 69, 136, 145);  //Screen: 3
@@ -402,11 +429,11 @@ end;
 
 procedure CreateGUI_Screen_4;
 begin
-  Edit1 := DynTFTEdit_Create(4, 9, 21, 200, 21);  //Screen: 4
+  Edit1 := DynTFTEdit_Create(4, 9, 21, 200, 24);  //Screen: 4
   Edit1^.Text := 'Edit1';
 
   vkTest := DynTFTVirtualKeyboard_Create(4, 1, 45, 318, 184);  //Screen: 4
-  vkTest^.Color := {$IFDEF IsDesktop} $00FFFFFF {$ELSE} $FDFF {$ENDIF};
+  vkTest^.Color := {$IFDEF IsDesktop} $00FFFFFF {$ELSE} $FFFF {$ENDIF};
   {$IFDEF IsDesktop}
     vkTest^.OnCharKey^ := VirtualKeyboard_OnCharKey;
     vkTest^.OnSpecialKey^ := VirtualKeyboard_OnSpecialKey;
@@ -421,74 +448,131 @@ end;
 procedure CreateGUI_Screen_5;
 begin
   ComboBox1 := DynTFTComboBox_Create(5, 9, 29, 120, 22);  //Screen: 5
-  ComboBox1^.ListBox^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00FAFA6E {$ELSE} $755A {$ENDIF};
-  ComboBox1^.Edit^.Color := {$IFDEF IsDesktop} $00FAFA6E {$ELSE} $755A {$ENDIF};
+  ComboBox1^.ListBox^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00FAFA6E {$ELSE} $6FDF {$ENDIF};
+  ComboBox1^.Edit^.Color := {$IFDEF IsDesktop} $00FAFA6E {$ELSE} $6FDF {$ENDIF};
   ComboBox1^.Editable := False;
   ComboBox1^.ListBox^.Items^.Count := 10;
-  ComboBox1^.ListBox^.Items^.Strings[0] := 'one';
-  ComboBox1^.ListBox^.Items^.Strings[1] := 'two';
-  ComboBox1^.ListBox^.Items^.Strings[2] := 'three';
-  ComboBox1^.ListBox^.Items^.Strings[3] := 'four';
-  ComboBox1^.ListBox^.Items^.Strings[4] := 'five';
-  ComboBox1^.ListBox^.Items^.Strings[5] := 'six';
-  ComboBox1^.ListBox^.Items^.Strings[6] := 'seven';
-  ComboBox1^.ListBox^.Items^.Strings[7] := 'eight';
-  ComboBox1^.ListBox^.Items^.Strings[8] := 'nine';
-  ComboBox1^.ListBox^.Items^.Strings[9] := 'ten';
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ComboBox1^.ListBox^.Items^.OnGetItem^ := ComboBoxItemsGetItemText;
+    {$ELSE}
+      ComboBox1^.ListBox^.Items^.OnGetItem := @ComboBoxItemsGetItemText;
+    {$ENDIF}
+  {$ELSE}
+    ComboBox1^.ListBox^.Items^.Strings[0] := 'one';
+    ComboBox1^.ListBox^.Items^.Strings[1] := 'two';
+    ComboBox1^.ListBox^.Items^.Strings[2] := 'three';
+    ComboBox1^.ListBox^.Items^.Strings[3] := 'four';
+    ComboBox1^.ListBox^.Items^.Strings[4] := 'five';
+    ComboBox1^.ListBox^.Items^.Strings[5] := 'six';
+    ComboBox1^.ListBox^.Items^.Strings[6] := 'seven';
+    ComboBox1^.ListBox^.Items^.Strings[7] := 'eight';
+    ComboBox1^.ListBox^.Items^.Strings[8] := 'nine';
+    ComboBox1^.ListBox^.Items^.Strings[9] := 'ten';
+  {$ENDIF}
 
   ComboBox2 := DynTFTComboBox_Create(5, 9, 77, 120, 24);  //Screen: 5
   ComboBox2^.ListBox^.Items^.Count := 10;
-  ComboBox2^.ListBox^.Items^.Strings[0] := 'one';
-  ComboBox2^.ListBox^.Items^.Strings[1] := 'two';
-  ComboBox2^.ListBox^.Items^.Strings[2] := 'three';
-  ComboBox2^.ListBox^.Items^.Strings[3] := 'four';
-  ComboBox2^.ListBox^.Items^.Strings[4] := 'five';
-  ComboBox2^.ListBox^.Items^.Strings[5] := 'six';
-  ComboBox2^.ListBox^.Items^.Strings[6] := 'seven';
-  ComboBox2^.ListBox^.Items^.Strings[7] := 'eight';
-  ComboBox2^.ListBox^.Items^.Strings[8] := 'nine';
-  ComboBox2^.ListBox^.Items^.Strings[9] := 'ten';
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ComboBox2^.ListBox^.Items^.OnGetItem^ := ComboBoxItemsGetItemText;
+    {$ELSE}
+      ComboBox2^.ListBox^.Items^.OnGetItem := @ComboBoxItemsGetItemText;
+    {$ENDIF}
+  {$ELSE}
+    ComboBox2^.ListBox^.Items^.Strings[0] := 'one';
+    ComboBox2^.ListBox^.Items^.Strings[1] := 'two';
+    ComboBox2^.ListBox^.Items^.Strings[2] := 'three';
+    ComboBox2^.ListBox^.Items^.Strings[3] := 'four';
+    ComboBox2^.ListBox^.Items^.Strings[4] := 'five';
+    ComboBox2^.ListBox^.Items^.Strings[5] := 'six';
+    ComboBox2^.ListBox^.Items^.Strings[6] := 'seven';
+    ComboBox2^.ListBox^.Items^.Strings[7] := 'eight';
+    ComboBox2^.ListBox^.Items^.Strings[8] := 'nine';
+    ComboBox2^.ListBox^.Items^.Strings[9] := 'ten';
+  {$ENDIF}
 
   Label4 := DynTFTLabel_Create(5, 153, 77, 61, 20);  //Screen: 5
   Label4^.Caption := 'Editable';
-  Label4^.Color := {$IFDEF IsDesktop} $00C8C800 {$ELSE} $0108 {$ENDIF};
+  Label4^.Color := {$IFDEF IsDesktop} $00C8C800 {$ELSE} $0659 {$ENDIF};
   Label4^.Font_Color := CL_WHITE;
 
   Label5 := DynTFTLabel_Create(5, 153, 29, 120, 20);  //Screen: 5
   Label5^.Caption := 'Selectable only';
-  Label5^.Color := {$IFDEF IsDesktop} $00C8C800 {$ELSE} $0108 {$ENDIF};
+  Label5^.Color := {$IFDEF IsDesktop} $00C8C800 {$ELSE} $0659 {$ENDIF};
   Label5^.Font_Color := CL_WHITE;
 
   ListBox2 := DynTFTListBox_Create(5, 9, 149, 100, 80);  //Screen: 5
   ListBox2^.Items^.Count := 10;
-  ListBox2^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00F0F000 {$ELSE} $0410 {$ENDIF};
+  ListBox2^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00F0F000 {$ELSE} $079E {$ENDIF};
   DynTFTUpdateScrollbarEventHandlers(ListBox2^.VertScrollBar);
-  ListBox2^.Items^.Strings[0] := 'one';
-  ListBox2^.Items^.Strings[1] := 'two';
-  ListBox2^.Items^.Strings[2] := 'three';
-  ListBox2^.Items^.Strings[3] := 'four';
-  ListBox2^.Items^.Strings[4] := 'five';
-  ListBox2^.Items^.Strings[5] := 'six';
-  ListBox2^.Items^.Strings[6] := 'seven';
-  ListBox2^.Items^.Strings[7] := 'eight';
-  ListBox2^.Items^.Strings[8] := 'nine';
-  ListBox2^.Items^.Strings[9] := 'ten';
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ListBox2^.Items^.OnGetItem^ := ListBoxItemsGetItemText;
+    {$ELSE}
+      ListBox2^.Items^.OnGetItem := @ListBoxItemsGetItemText;
+    {$ENDIF}
+  {$ELSE}
+    ListBox2^.Items^.Strings[0] := 'one';
+    ListBox2^.Items^.Strings[1] := 'two';
+    ListBox2^.Items^.Strings[2] := 'three';
+    ListBox2^.Items^.Strings[3] := 'four';
+    ListBox2^.Items^.Strings[4] := 'five';
+    ListBox2^.Items^.Strings[5] := 'six';
+    ListBox2^.Items^.Strings[6] := 'seven';
+    ListBox2^.Items^.Strings[7] := 'eight';
+    ListBox2^.Items^.Strings[8] := 'nine';
+    ListBox2^.Items^.Strings[9] := 'ten';
+  {$ENDIF}
 
   ListBox4 := DynTFTListBox_Create(5, 177, 149, 100, 80);  //Screen: 5
   ListBox4^.Items^.Count := 10;
-  ListBox4^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00F0F000 {$ELSE} $0410 {$ENDIF};
+  ListBox4^.Items^.BackgroundColor := {$IFDEF IsDesktop} $00F0F000 {$ELSE} $079E {$ENDIF};
   DynTFTUpdateScrollbarEventHandlers(ListBox4^.VertScrollBar);
-  ListBox4^.Items^.Strings[0] := 'one';
-  ListBox4^.Items^.Strings[1] := 'two';
-  ListBox4^.Items^.Strings[2] := 'three';
-  ListBox4^.Items^.Strings[3] := 'four';
-  ListBox4^.Items^.Strings[4] := 'five';
-  ListBox4^.Items^.Strings[5] := 'six';
-  ListBox4^.Items^.Strings[6] := 'seven';
-  ListBox4^.Items^.Strings[7] := 'eight';
-  ListBox4^.Items^.Strings[8] := 'nine';
-  ListBox4^.Items^.Strings[9] := 'ten';
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ListBox4^.Items^.OnGetItem^ := ListBoxItemsGetItemText;
+    {$ELSE}
+      ListBox4^.Items^.OnGetItem := @ListBoxItemsGetItemText;
+    {$ENDIF}
+  {$ELSE}
+    ListBox4^.Items^.Strings[0] := 'one';
+    ListBox4^.Items^.Strings[1] := 'two';
+    ListBox4^.Items^.Strings[2] := 'three';
+    ListBox4^.Items^.Strings[3] := 'four';
+    ListBox4^.Items^.Strings[4] := 'five';
+    ListBox4^.Items^.Strings[5] := 'six';
+    ListBox4^.Items^.Strings[6] := 'seven';
+    ListBox4^.Items^.Strings[7] := 'eight';
+    ListBox4^.Items^.Strings[8] := 'nine';
+    ListBox4^.Items^.Strings[9] := 'ten';
+  {$ENDIF}
 
+end;
+
+
+procedure CreateGUI_Screen_6;
+begin
+  TrackBar1 := DynTFTTrackBar_CreateWithDir(6, 9, 33, 132, 24, CTrackBarHorizDir);  //Screen: 6
+  TrackBar1^.Max := 10;
+  TrackBar1^.Min := 0;
+  TrackBar1^.Position := 3;
+  DynTFTUpdateTrackBarEventHandlers(TrackBar1);
+
+  ProgressBar1 := DynTFTProgressBar_CreateWithDir(6, 185, 45, 100, 20, CProgressBarHorizDir);  //Screen: 6
+  ProgressBar1^.Max := 10;
+  ProgressBar1^.Min := 0;
+  ProgressBar1^.Position := 3;
+  TrackBar2 := DynTFTTrackBar_CreateWithDir(6, 25, 93, 24, 132, CTrackBarVertDir);  //Screen: 6
+  TrackBar2^.Max := 10;
+  TrackBar2^.Min := 0;
+  TrackBar2^.Position := 7;
+  DynTFTUpdateTrackBarEventHandlers(TrackBar2);
+
+  ProgressBar2 := DynTFTProgressBar_CreateWithDir(6, 185, 93, 24, 132, CProgressBarVertDir);  //Screen: 6
+  ProgressBar2^.Max := 10;
+  ProgressBar2^.Min := 0;
+  ProgressBar2^.Position := 7;
 end;
 
 
@@ -500,6 +584,7 @@ begin
   CreateGUI_Screen_3;
   CreateGUI_Screen_4;
   CreateGUI_Screen_5;
+  CreateGUI_Screen_6;
 
   DynTFTRepaintScreenComponents(0, CREPAINTONSTARTUP, nil);
   DynTFTRepaintScreenComponents(1, CREPAINTONSTARTUP, nil);

@@ -51,6 +51,11 @@ const
   //CItemHeight = 15; //13 pixels for text and 2 pixels for box
 
 type
+  TItemsString = string[CMaxItemsStringLength];
+
+  TOnGetItemEvent = procedure(AComp: PPtrRec; Index: LongInt; var ItemText: string);
+  POnGetItemEvent = ^TOnGetItemEvent;
+
   TDynTFTItems = record
     BaseProps: TDynTFTBaseProperties;  //inherited properties from TDynTFTBaseProperties - must be the first field of this structure !!!
 
@@ -69,7 +74,11 @@ type
     OnOwnerInternalMouseMove: PDynTFTGenericEventHandler;
     OnOwnerInternalMouseUp: PDynTFTGenericEventHandler;
 
-    Strings: array[0..CMaxItemItemCount - 1] of string[CMaxItemsStringLength];
+    {$IFDEF UseExternalItems}
+      OnGetItem: POnGetItemEvent;
+    {$ELSE}
+      Strings: array[0..CMaxItemItemCount - 1] of string[CMaxItemsStringLength];
+    {$ENDIF}  
   end;
   PDynTFTItems = ^TDynTFTItems;  
 
@@ -79,6 +88,7 @@ procedure DynTFTItems_Destroy(var AItems: PDynTFTItems);
 procedure DynTFTItems_DestroyAndPaint(var AItems: PDynTFTItems);
 
 function DynTFTGetNumberOfItemsToDraw(AItems: PDynTFTItems): Word;
+procedure DynTFTItemsGetItemText(AItems: PDynTFTItems; Index: LongInt; var ItemText: string);
 
 procedure DynTFTRegisterItemsEvents;
 function DynTFTGetItemsComponentType: TDynTFTComponentType;
@@ -100,6 +110,22 @@ begin                     //bug for height < 3                 // Do not calcula
 end;
 
 
+procedure DynTFTItemsGetItemText(AItems: PDynTFTItems; Index: LongInt; var ItemText: string);
+begin
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      if Assigned(AItems^.OnGetItem) then
+        if Assigned(AItems^.OnGetItem^) then
+    {$ELSE}
+      if AItems^.OnGetItem <> nil then
+    {$ENDIF}
+        AItems^.OnGetItem^(PPtrRec(TPtrRec(AItems)), Index, ItemText);
+  {$ELSE}
+    ItemText := AItems^.Strings[Index];
+  {$ENDIF}
+end;
+
+
 procedure DynTFTDrawItems(AItems: PDynTFTItems; FullRedraw: Boolean);
 var
   x1, y1, x2, y2: TSInt;
@@ -108,6 +134,13 @@ var
   IndexOfDrawingItem: LongInt;
   FocusRectangleY: LongInt;
   FontCol: TColor;
+  {$IFDEF UseExternalItems}
+    {$IFDEF IsDesktop}
+      ATempString: string;
+    {$ELSE}
+      ATempString: string[CMaxItemsStringLength];
+    {$ENDIF}
+  {$ENDIF}
 begin
   if not DynTFTIsDrawableComponent(PDynTFTBaseComponent(TPtrRec(AItems))) then
     Exit;
@@ -126,8 +159,8 @@ begin
           
   //lines
   DynTFT_Set_Pen(CL_DynTFTItems_DarkEdge, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   NumberOfItemsToDraw := DynTFTGetNumberOfItemsToDraw(AItems);
   if NumberOfItemsToDraw > AItems^.Count then
@@ -161,7 +194,22 @@ begin
       DynTFT_Set_Brush(1, AItems^.BackgroundColor, 0, 0, 0, 0);
     end;
 
-    DynTFT_Write_Text(AItems^.Strings[IndexOfDrawingItem], x1 + 3, y1 - 1 + i * AItems^.ItemHeight);
+    {$IFDEF UseExternalItems}
+      ATempString := 'OnGetItem is nil';
+      {$IFDEF IsDesktop}
+        ATempString := ATempString + ' ' + IntToStr(IndexOfDrawingItem); //only on desktop, to provide more debug info 
+
+        if Assigned(AItems^.OnGetItem) then
+          if Assigned(AItems^.OnGetItem^) then
+      {$ELSE}
+        if AItems^.OnGetItem <> nil then
+      {$ENDIF}
+          AItems^.OnGetItem^(PPtrRec(TPtrRec(AItems)), IndexOfDrawingItem, ATempString);
+          
+      DynTFT_Write_Text(ATempString, x1 + 3, y1 - 1 + i * AItems^.ItemHeight);
+    {$ELSE}
+      DynTFT_Write_Text(AItems^.Strings[IndexOfDrawingItem], x1 + 3, y1 - 1 + i * AItems^.ItemHeight);
+    {$ENDIF}
   end;
 
   //Draw focus rectangle from lines
@@ -174,17 +222,20 @@ begin
   begin
     Inc(x1);
     y2 := FocusRectangleY + AItems^.ItemHeight;
-    DynTFT_Line(x1, FocusRectangleY, x1, y2); //vert
-    DynTFT_Line(x1, FocusRectangleY, x2 - 1, FocusRectangleY); //horiz
-    DynTFT_Line(x2 - 1, FocusRectangleY, x2 - 1, y2); //vert
-    DynTFT_Line(x1, y2, x2 - 1, y2); //horiz
+    DynTFT_V_Line(FocusRectangleY, y2, x1); //vert
+    DynTFT_H_Line(x1, x2 - 1, FocusRectangleY); //horiz
+    DynTFT_V_Line(FocusRectangleY, y2, x2 - 1); //vert
+    DynTFT_H_Line(x1, x2 - 1, y2); //horiz
   end;
 end;
           
 
 function DynTFTItems_Create(ScreenIndex: Byte; Left, Top, Width, Height: TSInt): PDynTFTItems;
 var
-  DummyTextWidth, i: Word;
+  DummyTextWidth: Word;
+  {$IFNDEF UseExternalItems}
+    i: Word;
+  {$ENDIF}
 begin
   Result := PDynTFTItems(TPtrRec(DynTFTComponent_Create(ScreenIndex, SizeOf(Result^))));
 
@@ -207,6 +258,9 @@ begin
     New(Result^.OnOwnerInternalMouseDown);
     New(Result^.OnOwnerInternalMouseMove);
     New(Result^.OnOwnerInternalMouseUp);
+    {$IFDEF UseExternalItems}
+      New(Result^.OnGetItem);
+    {$ENDIF}
 
     Result^.OnOwnerInternalMouseDown^ := nil;
     Result^.OnOwnerInternalMouseMove^ := nil;
@@ -223,8 +277,10 @@ begin
   Result^.BackgroundColor := CL_DynTFTItems_Background;
   Result^.FontColor := CL_DynTFTItems_EnabledFont;
 
-  for i := 0 to CMaxItemItemCount - 1 do
-    Result^.Strings[i] := '';
+  {$IFNDEF UseExternalItems}
+    for i := 0 to CMaxItemItemCount - 1 do
+      Result^.Strings[i] := '';
+  {$ENDIF}    
 end;
 
 

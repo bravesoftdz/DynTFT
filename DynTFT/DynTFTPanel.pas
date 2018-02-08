@@ -113,12 +113,12 @@ begin
 
   //border lines
   DynTFT_Set_Pen(CL_DynTFTPanel_LightEdge, 1);
-  DynTFT_Line(x1, y1, x1, y2); //vert
-  DynTFT_Line(x1, y1, x2, y1); //horiz
+  DynTFT_V_Line(y1, y2, x1); //vert
+  DynTFT_H_Line(x1, x2, y1); //horiz
 
   DynTFT_Set_Pen(CL_DynTFTPanel_DarkEdge, 1);
-  DynTFT_Line(x2, y1, x2, y2); //vert
-  DynTFT_Line(x1, y2, x2, y2); //horiz
+  DynTFT_V_Line(y1, y2, x2); //vert
+  DynTFT_H_Line(x1, x2, y2); //horiz
 
   //Draw focus rectangle from lines
   if APanel^.BaseProps.Focused and CFOCUSED = CFOCUSED then
@@ -127,10 +127,10 @@ begin
     BkCol := APanel^.Color;
     
   DynTFT_Set_Pen(BkCol, 1);
-  DynTFT_Line(x1 + 4, y1 + 3, x1 + 4, y2 - 3); //vert
-  DynTFT_Line(x1 + 4, y1 + 3, x2 - 4, y1 + 3); //horiz
-  DynTFT_Line(x2 - 4, y1 + 3, x2 - 4, y2 - 3); //vert
-  DynTFT_Line(x1 + 4, y2 - 3, x2 - 4, y2 - 3); //horiz
+  DynTFT_V_Line(y1 + 3, y2 - 3, x1 + 4); //vert
+  DynTFT_H_Line(x1 + 4, x2 - 4, y1 + 3); //horiz
+  DynTFT_V_Line(y1 + 3, y2 - 3, x2 - 4); //vert
+  DynTFT_H_Line(x1 + 4, x2 - 4, y2 - 3); //horiz
 
   if Length(APanel^.Caption) > 0 then
   begin

@@ -201,17 +201,17 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
   
-  DynTFT_Line(x1 + 2, y1 + 4, x1 + 2, y1 + 12);
-  DynTFT_Line(x1 + 9, y1 + 8, x1 + 26, y1 + 8);
-  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, Y1 + 5);   //up
-  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, Y1 + 11);  //down
-  DynTFT_Line(x1 + 9, y1 + 5, x1 + 9, Y1 + 11);  //vertical
+  DynTFT_V_Line(y1 + 4, y1 + 12, x1 + 2);
+  DynTFT_H_Line(x1 + 9, x1 + 26, y1 + 8);
+  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, y1 + 5);   //up
+  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, y1 + 11);  //down
+  DynTFT_V_Line(y1 + 5, y1 + 11, x1 + 9);  //vertical
 
-  DynTFT_Line(x1 + 27, y1 + 20, x1 + 27, Y1 + 28);
-  DynTFT_Line(x1 + 3, y1 + 24, x1 + 20, y1 + 24);
-  DynTFT_Line(x1 + 21, y1 + 27, x1 + 26, Y1 + 24);  //up
-  DynTFT_Line(x1 + 21, y1 + 21, x1 + 26, Y1 + 24);  //down
-  DynTFT_Line(x1 + 20, y1 + 21, x1 + 20, y1 + 27);  //vertical
+  DynTFT_V_Line(y1 + 20, y1 + 28, x1 + 27);
+  DynTFT_H_Line(x1 + 3, x1 + 20, y1 + 24);
+  DynTFT_Line(x1 + 21, y1 + 27, x1 + 26, y1 + 24);  //up
+  DynTFT_Line(x1 + 21, y1 + 21, x1 + 26, y1 + 24);  //down
+  DynTFT_V_Line(y1 + 21, y1 + 27, x1 + 20);  //vertical
 end;
 
 
@@ -224,10 +224,10 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
   
-  DynTFT_Line(x1 + 9, y1 + 8, x1 + 26, y1 + 8);
-  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, Y1 + 3);   //up
-  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, Y1 + 13);  //down
-  DynTFT_Line(x1 + 9, y1 + 4, x1 + 9, Y1 + 12);  //vertical
+  DynTFT_H_Line(x1 + 9, x1 + 26, y1 + 8);
+  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, y1 + 3);   //up
+  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, y1 + 13);  //down
+  DynTFT_V_Line(y1 + 4, y1 + 12, x1 + 9);  //vertical
 end;
 
 
@@ -242,9 +242,9 @@ begin
 
   DynTFT_Set_Brush(0, 0, 0, 0, 0, 0);
   DynTFT_Rectangle(x1 + 3, y1 + 7, x1 + 13, y1 + 21);
-  DynTFT_Line(x1 + 5, y1 + 11, x1 + 11, Y1 + 11);  //horiz 1
-  DynTFT_Line(x1 + 5, y1 + 14, x1 + 11, Y1 + 14);  //horiz 2
-  DynTFT_Line(x1 + 5, y1 + 17, x1 + 11, Y1 + 17);  //horiz 3
+  DynTFT_H_Line(x1 + 5, x1 + 11, y1 + 11);  //horiz 1
+  DynTFT_H_Line(x1 + 5, x1 + 11, y1 + 14);  //horiz 2
+  DynTFT_H_Line(x1 + 5, x1 + 11, y1 + 17);  //horiz 3
 end;
 
 
@@ -257,10 +257,10 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
 
-  DynTFT_Line(x1 + 9, y1 + 8, x1 + 18, y1 + 8);
-  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, Y1 + 3);   //up
-  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, Y1 + 13);  //down
-  DynTFT_Line(x1 + 9, y1 + 4, x1 + 9, Y1 + 12);  //vertical
+  DynTFT_H_Line(x1 + 9, x1 + 18, y1 + 8);
+  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, y1 + 3);   //up
+  DynTFT_Line(x1 + 3, y1 + 8, x1 + 9, y1 + 13);  //down
+  DynTFT_V_Line(y1 + 4, y1 + 12, x1 + 9);  //vertical
 end;
 
 
@@ -273,10 +273,10 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
 
-  DynTFT_Line(x1 + 7, y1 + 8, x1 + 16, y1 + 8);
-  DynTFT_Line(x1 + 16, y1 + 13, x1 + 22, Y1 + 8);  //up
-  DynTFT_Line(x1 + 16, y1 + 3, x1 + 22, Y1 + 8);   //down
-  DynTFT_Line(x1 + 16, y1 + 4, x1 + 16, Y1 + 12);  //vertical
+  DynTFT_H_Line(x1 + 7, x1 + 16, y1 + 8);
+  DynTFT_Line(x1 + 16, y1 + 13, x1 + 22, y1 + 8);  //up
+  DynTFT_Line(x1 + 16, y1 + 3, x1 + 22, y1 + 8);   //down
+  DynTFT_V_Line(y1 + 4, y1 + 12, x1 + 16);  //vertical
 end;
 
 
@@ -289,10 +289,10 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
 
-  DynTFT_Line(x1 + 13, y1 + 8, x1 + 13, y1 + 13); //vertical
-  DynTFT_Line(x1 + 9, y1 + 8, x1 + 17, Y1 + 8);   //horizontal
-  DynTFT_Line(x1 + 9, y1 + 8, x1 + 13, Y1 + 2);   //up
-  DynTFT_Line(x1 + 13, y1 + 2, x1 + 17, Y1 + 8);  //down
+  DynTFT_V_Line(y1 + 8, y1 + 13, x1 + 13); //vertical
+  DynTFT_H_Line(x1 + 9, x1 + 17, y1 + 8);   //horizontal
+  DynTFT_Line(x1 + 9, y1 + 8, x1 + 13, y1 + 2);   //up
+  DynTFT_Line(x1 + 13, y1 + 2, x1 + 17, y1 + 8);  //down
 end;
 
 
@@ -305,10 +305,10 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
 
-  DynTFT_Line(x1 + 13, y1 + 2, x1 + 13, y1 + 7);   //vertical
-  DynTFT_Line(x1 + 9, y1 + 7, x1 + 17, Y1 + 7);    //horizontal
-  DynTFT_Line(x1 + 13, y1 + 13, x1 + 17, Y1 + 7);  //up
-  DynTFT_Line(x1 + 9, y1 + 7, x1 + 13, Y1 + 13);   //down
+  DynTFT_V_Line(y1 + 2, y1 + 7, x1 + 13);   //vertical
+  DynTFT_H_Line(x1 + 9, x1 + 17, y1 + 7);    //horizontal
+  DynTFT_Line(x1 + 13, y1 + 13, x1 + 17, y1 + 7);  //up
+  DynTFT_Line(x1 + 9, y1 + 7, x1 + 13, y1 + 13);   //down
 end;
 
 
@@ -321,11 +321,11 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
 
-  DynTFT_Line(x1 + 20, y1 + 10, x1 + 20, y1 + 21);  //vertical
-  DynTFT_Line(x1 + 12, y1 + 21, x1 + 20, Y1 + 21);  //horizontal
-  DynTFT_Line(x1 + 12, y1 + 17, x1 + 12, Y1 + 25);  //vertical (arrow)
-  DynTFT_Line(x1 + 7, y1 + 21, x1 + 12, Y1 + 16);   //up (arrow)
-  DynTFT_Line(x1 + 7, y1 + 21, x1 + 12, Y1 + 26);   //down (arrow)
+  DynTFT_V_Line(y1 + 10, y1 + 21, x1 + 20);  //vertical
+  DynTFT_H_Line(x1 + 12, x1 + 20, y1 + 21);  //horizontal
+  DynTFT_V_Line(y1 + 17, y1 + 25, x1 + 12);  //vertical (arrow)
+  DynTFT_Line(x1 + 7, y1 + 21, x1 + 12, y1 + 16);   //up (arrow)
+  DynTFT_Line(x1 + 7, y1 + 21, x1 + 12, y1 + 26);   //down (arrow)
 end;
 
 
@@ -338,11 +338,11 @@ begin
   x1 := ABase^.BaseProps.Left;
   y1 := ABase^.BaseProps.Top;
 
-  DynTFT_Line(x1 + 19, y1 + 18, x1 + 19, y1 + 24);  //vertical l
-  DynTFT_Line(x1 + 23, y1 + 18, x1 + 23, y1 + 24);  //vertical r
-  DynTFT_Line(x1 + 19, y1 + 24, x1 + 23, y1 + 24);  //horizontal bottom
-  DynTFT_Line(x1 + 15, y1 + 18, x1 + 19, y1 + 18);  //horizontal l
-  DynTFT_Line(x1 + 23, y1 + 18, x1 + 27, y1 + 18);  //horizontal r
+  DynTFT_V_Line(y1 + 18, y1 + 24, x1 + 19);  //vertical l
+  DynTFT_V_Line(y1 + 18, y1 + 24, x1 + 23);  //vertical r
+  DynTFT_H_Line(x1 + 19, x1 + 23, y1 + 24);  //horizontal bottom
+  DynTFT_H_Line(x1 + 15, x1 + 19, y1 + 18);  //horizontal l
+  DynTFT_H_Line(x1 + 23, x1 + 27, y1 + 18);  //horizontal r
   DynTFT_Line(x1 + 15, y1 + 17, x1 + 21, y1 + 9);   //up
   DynTFT_Line(x1 + 21, y1 + 9, x1 + 27, y1 + 17);   //down
 end;
@@ -386,7 +386,7 @@ begin
   
   if not IsCaps(AVK) then
   {$IFDEF IsDesktop}
-    AText[1] := Chr(Ord(AText[1]) + 32);       //not sure how to do this for unicode
+    AText[1] := AnsiChar(Chr(Ord(AText[1]) + 32));       //not sure how to do this for unicode
   {$ELSE}
     AText[0] := Chr(Ord(AText[0]) + 32);
   {$ENDIF}
@@ -689,6 +689,7 @@ begin
     AKeyButton^.BaseProps.OnMouseDownUser := @CapsKey_OnMouseDownUser;
   {$ENDIF}
   AKeyButton^.UpCaption := 'Caps';
+  //AKeyButton^.DownCaption := 'Lock';
   DynTFTShowComponent(PDynTFTBaseComponent(TPtrRec(AKeyButton)));
   AKeyButton^.BaseProps.Parent := PPtrRec(TPtrRec(AVK));
 

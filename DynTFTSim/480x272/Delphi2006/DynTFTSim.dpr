@@ -56,7 +56,9 @@ uses
   DynTFTSimScreenForm in 'DynTFTSimScreenForm.pas' {frmDynTFTSimScreen},
   DynTFTGUI in '..\GUI\DynTFTGUI.pas',
   DynTFTGUIObjects in '..\GUI\DynTFTGUIObjects.pas',
-  DynTFTHandlers in '..\GUI\DynTFTHandlers.pas';
+  DynTFTHandlers in '..\GUI\DynTFTHandlers.pas',
+  DynTFTProgressBar in 'D:\DynTFT\DynTFTProgressBar.pas',
+  DynTFTTrackBar in 'D:\DynTFT\DynTFTTrackBar.pas';
 
 {$R *.res}
 

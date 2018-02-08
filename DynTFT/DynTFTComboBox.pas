@@ -173,6 +173,9 @@ end;
 procedure TDynTFTComboBox_OnDynTFTChildListBoxInternalMouseUp(ABase: PDynTFTBaseComponent);
 var
   AComboBox: PDynTFTComboBox;
+  {$IFDEF IsDesktop}
+    ATempString: string;
+  {$ENDIF}
 begin
   if PDynTFTBaseComponent(TPtrRec(ABase^.BaseProps.Parent))^.BaseProps.ComponentType = ComponentType then
   begin
@@ -184,7 +187,13 @@ begin
 
     if AComboBox^.ListBox^.Items^.ItemIndex > -1 then
     begin
-      AComboBox^.Edit^.Text := AComboBox^.ListBox^.Items^.Strings[AComboBox^.ListBox^.Items^.ItemIndex];
+      {$IFDEF IsDesktop}
+        DynTFTItemsGetItemText(AComboBox^.ListBox^.Items, AComboBox^.ListBox^.Items^.ItemIndex, ATempString);
+        AComboBox^.Edit^.Text := ATempString;
+      {$ELSE}
+        DynTFTItemsGetItemText(AComboBox^.ListBox^.Items, AComboBox^.ListBox^.Items^.ItemIndex, AComboBox^.Edit^.Text);
+      {$ENDIF}
+      //AComboBox^.Edit^.Text := AComboBox^.ListBox^.Items^.Strings[AComboBox^.ListBox^.Items^.ItemIndex];
       DynTFTEditAfterSetText(AComboBox^.Edit);
     end;
 

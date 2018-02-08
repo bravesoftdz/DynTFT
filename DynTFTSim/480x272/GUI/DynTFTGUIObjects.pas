@@ -38,7 +38,7 @@ uses
   DynTFTButton, DynTFTArrowButton, DynTFTPanel, DynTFTCheckBox, DynTFTScrollBar,
   DynTFTItems, DynTFTListBox, DynTFTLabel, DynTFTRadioButton, DynTFTRadioGroup,
   DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTVirtualKeyboard,
-  DynTFTComboBox
+  DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar
   {$I DynTFTGUIAdditionalUnits.inc}
   ;
 
@@ -49,6 +49,7 @@ var
   tabbtnTab3: PDynTFTTabButton;
   tabbtnTab4: PDynTFTTabButton;
   tabbtnTab5: PDynTFTTabButton;
+  tabbtnTab6: PDynTFTTabButton;
   PageControl1: PDynTFTPageControl;
   btn1: PDynTFTButton;
   Arrow1: PDynTFTArrowButton;
@@ -100,6 +101,10 @@ var
   Label5: PDynTFTLabel;
   ListBox2: PDynTFTListBox;
   ListBox4: PDynTFTListBox;
+  TrackBar1: PDynTFTTrackBar;
+  TrackBar2: PDynTFTTrackBar;
+  ProgressBar2: PDynTFTProgressBar;
+  ProgressBar1: PDynTFTProgressBar;
 
 implementation
 

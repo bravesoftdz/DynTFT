@@ -60,6 +60,8 @@ uses
 procedure SwitchScreen_OnMouseDownUser(Sender: PPtrRec);
 procedure VirtualKeyboard_OnCharKey(Sender: PPtrRec; var PressedChar: TVKPressedChar; CurrentShiftState: TPtr);
 procedure VirtualKeyboard_OnSpecialKey(Sender: PPtrRec; SpecialKey: Integer; CurrentShiftState: TPtr);
+procedure ListBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
+procedure ComboBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
 
 
 implementation
@@ -124,6 +126,26 @@ begin
 
     VK_END: DynTFTMoveEditCaretToEnd(Edit1);
   end;
+end;
+
+
+procedure ListBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
+begin
+  {$IFDEF IsDesktop}
+    ItemText := IntToStr(Index);
+  {$ELSE}
+    IntToStr(Index, ItemText);
+  {$ENDIF}
+end;
+
+
+procedure ComboBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
+begin
+  {$IFDEF IsDesktop}
+    ItemText := IntToStr(Index);
+  {$ELSE}
+    IntToStr(Index, ItemText);
+  {$ENDIF}
 end;
 
 end.

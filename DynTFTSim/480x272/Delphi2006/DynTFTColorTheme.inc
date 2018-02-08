@@ -41,3 +41,6 @@
   {$I DynTFT_SysColors\DynTFTEdit_SysColors.inc}
   {$I DynTFT_SysColors\DynTFTKeyButton_SysColors.inc}
   {$I DynTFT_SysColors\DynTFTVirtualKeyboard_SysColors.inc}
+  {$I DynTFT_SysColors\DynTFTTrackBar_SysColors.inc}
+  {$I DynTFT_SysColors\DynTFTProgressBar_SysColors.inc}
+  {$I DynTFT_SysColors\DynTFTScreen_SysColors.inc}
