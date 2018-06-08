@@ -1,4 +1,8 @@
 program DynTFTExample;
+
+uses
+  DynTFTMessageBox;
+  
 const HEAP_START: DWord = $A0000FDC;  //make sure this is a valid address and is DWord aligned !
 const HEAP_SIZE: DWord = 20000;   //Make sure enough memory is allocated. See the desktop application (simulator) for guidance.
 
@@ -183,6 +187,22 @@ begin
     Result := STMPE610_OK;
 end;
 
+
+procedure MainLoopIteration;
+begin
+  Check_TP;
+  DynTFT_GUI_LoopIteration;
+end;
+
+
+procedure HandleMessageBox(AMessageBox: PDynTFTMessageBox);
+begin
+  repeat
+    MainLoopIteration;
+  until AMessageBox^.Done;
+end;
+
+
 var 
   TPConstsStruct: TTPConstants;
   AText: string[10];
@@ -219,6 +239,7 @@ begin
   TFT_Rectangle(0, 0, 480, 272);
   
   DynTFT_GUI_Start;
+  DynTFTMessageBoxMainLoopHandler := @HandleMessageBox; //use this if you want modal MessageBox
               {
   IntToStr(TPConstsStruct.X_Min, AText);   TFT_Write_Text(AText, 330, 10);
   IntToStr(TPConstsStruct.X_Max, AText);   TFT_Write_Text(AText, 330, 30);
@@ -228,8 +249,6 @@ begin
                    }
 
   repeat
-    Check_TP;
-
-    DynTFT_GUI_LoopIteration;
+    MainLoopIteration;
   until False;
 end.

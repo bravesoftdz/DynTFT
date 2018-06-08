@@ -40,8 +40,8 @@ Count=0
 Count=0
 [SEARCH_PATH]
 Count=5
-Path0=M:\Program Files\Mikroelektronika\mikroPascal PRO for dsPIC\Defs\
-Path1=M:\Program Files\Mikroelektronika\mikroPascal PRO for dsPIC\Uses\
+Path0=C:\Program Files\Mikroelektronika\mikroPascal PRO for dsPIC\Defs\
+Path1=C:\Program Files\Mikroelektronika\mikroPascal PRO for dsPIC\Uses\
 Path2=D:\DynTFTSim\320x240\dsPIC\
 Path3=D:\DynTFT\
 Path4=D:\DynTFTSim\320x240\GUI\

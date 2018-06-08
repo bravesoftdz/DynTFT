@@ -48,8 +48,8 @@ uses
   
   DynTFTButton, DynTFTArrowButton, DynTFTPanel, DynTFTCheckBox, DynTFTScrollBar,
   DynTFTItems, DynTFTListBox, DynTFTLabel, DynTFTRadioButton, DynTFTRadioGroup,
-  DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTKeyButton,
-  DynTFTVirtualKeyboard, DynTFTComboBox
+  DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTKeyButton, DynTFTProgressBar,
+  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTMessageBox
 
   {$IFDEF IsDesktop}
     ,SysUtils, Forms, TFT
@@ -62,6 +62,7 @@ procedure VirtualKeyboard_OnCharKey(Sender: PPtrRec; var PressedChar: TVKPressed
 procedure VirtualKeyboard_OnSpecialKey(Sender: PPtrRec; SpecialKey: Integer; CurrentShiftState: TPtr);
 procedure ListBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
 procedure ComboBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
+procedure btnShowMessageBox_OnMouseUpUser(Sender: PPtrRec);
 
 
 implementation
@@ -146,6 +147,41 @@ begin
   {$ELSE}
     IntToStr(Index, ItemText);
   {$ENDIF}
+end;
+
+
+procedure btnShowMessageBox_OnMouseUpUser(Sender: PPtrRec);
+var
+  AButton: PDynTFTButton;
+  Res: Integer;                                
+  MBMsg: string {$IFNDEF IsDesktop}[CMessageBoxMaxTextLength] {$ENDIF};
+  MBTitle: string {$IFNDEF IsDesktop}[CMessageBoxMaxTitleLength] {$ENDIF};
+begin
+  AButton := PDynTFTButton(TPtrRec(Sender));
+  MBMsg := 'This is a very long messagebox.';
+  MBTitle := 'MB Title fp';
+
+  {$IFDEF IsDesktop}
+    DynTFT_DebugConsole('AButton $' + IntToHex(DWord(AButton), 8) + ' before showing Messagebox');
+  {$ENDIF}
+
+  ProgressBar1^.Position := 1;
+  ProgressBar2^.Position := 1;
+  DynTFTDrawProgressBar(ProgressBar1, False);
+  DynTFTDrawProgressBar(ProgressBar2, False);
+
+  Res := DynTFTShowMessageBox(6, MBMsg, MBTitle, CDynTFT_MB_OKCANCEL);
+  //Res := DynTFTShowMessageBox(6, MBMsg, MBTitle, CDynTFT_MB_YESNO);
+
+  {$IFDEF IsDesktop}
+    DynTFT_DebugConsole('AButton $' + IntToHex(DWord(AButton), 8) + ' after closing Messagebox: ' + IntToStr(Res));
+    DynTFT_DebugConsole('');
+  {$ENDIF}
+
+  ProgressBar1^.Position := Res * 3;
+  ProgressBar2^.Position := Res * 3;
+  DynTFTDrawProgressBar(ProgressBar1, False);
+  DynTFTDrawProgressBar(ProgressBar2, False);
 end;
 
 end.

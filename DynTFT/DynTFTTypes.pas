@@ -93,7 +93,7 @@ const
     CDynTFTMaxComponentsContainer = 21;   //maximum number of screens
 
     //component types (when all pointers are of PPtrRec type, there should be a way to keep the component type
-    CDynTFTMaxRegisteredComponentTypes = 20; //Maximum numbers of components types, which are handled by the internal event handlers. Increase this number if you add many component types to your application.
+    CDynTFTMaxRegisteredComponentTypes = 21; //Maximum numbers of components types, which are handled by the internal event handlers. Increase this number if you add many component types to your application.
   {$ENDIF}
 
 type

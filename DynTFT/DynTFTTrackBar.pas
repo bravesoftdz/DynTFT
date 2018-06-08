@@ -128,9 +128,9 @@ begin
   TotalPositionSpace := TrbBar^.Max - TrbBar^.Min;
 
   {$IFDEF IsDesktop}
-    Result := Round(LongInt(TotalPanelSpace) * TrbBar^.Position / TotalPositionSpace);
+    Result := Round(LongInt(TotalPanelSpace) * (TrbBar^.Position - TrbBar^.Min) / TotalPositionSpace);
   {$ELSE}
-    Result := Word(Real(Real(LongInt(TotalPanelSpace)) * Real(TrbBar^.Position) / Real(TotalPositionSpace)));
+    Result := Word(Real(Real(LongInt(TotalPanelSpace)) * Real(TrbBar^.Position - TrbBar^.Min) / Real(TotalPositionSpace)));
   {$ENDIF}
 
   Result := Result + 1;  
@@ -162,7 +162,9 @@ begin
     Result := Round(LongInt(PnlPos) * TotalPositionSpace / LongInt(TotalPanelSpace));
   {$ELSE}
     Result := Word(Real(Real(LongInt(PnlPos)) * Real(TotalPositionSpace) / Real(LongInt(TotalPanelSpace))));
-  {$ENDIF}   
+  {$ENDIF}
+
+  Result := Result + TrbBar^.Min;
 end;
 
 
@@ -306,10 +308,29 @@ begin
   if not DynTFTIsDrawableComponent(PDynTFTBaseComponent(TPtrRec(ATrackBar))) then
     Exit;
 
+  if ATrackBar^.Max = ATrackBar^.Min then
+  begin
+    {$IFDEF IsDesktop}
+      raise Exception.Create('ATrackBar^.Max = ATrackBar^.Min  in DynTFTDrawTrackBar.  ' + IntToStr(ATrackBar^.Max) + ' = ' + IntToStr(ATrackBar^.Min));
+    {$ENDIF}
+    Exit;
+  end;
+
   x1 := ATrackBar^.BaseProps.Left;
   y1 := ATrackBar^.BaseProps.Top;
   x2 := x1 + ATrackBar^.BaseProps.Width;
   y2 := y1 + ATrackBar^.BaseProps.Height;
+
+  if ATrackBar^.Position < ATrackBar^.Min then
+    ATrackBar^.Position := ATrackBar^.Min;
+
+  if ATrackBar^.Position > ATrackBar^.Max then
+    ATrackBar^.Position := ATrackBar^.Max;
+
+  {$IFDEF IsDesktop}
+    if ATrackBar^.Max < ATrackBar^.Min then
+      DynTFT_DebugConsole('ATrackBar^.Max < ATrackBar^.Min  in DynTFTDrawTrackBar.  ' + IntToStr(ATrackBar^.Max) + ' < ' + IntToStr(ATrackBar^.Min));
+  {$ENDIF}
 
   if ATrackBar^.BaseProps.Enabled and CENABLED = CDISABLED then
   begin
@@ -378,6 +399,14 @@ var
   APosBackup: LongInt;
   MinValue, MaxValue: LongInt;
 begin
+  if ATrackBar^.Max = ATrackBar^.Min then
+  begin
+    {$IFDEF IsDesktop}
+      raise Exception.Create('ATrackBar^.Max = ATrackBar^.Min  in DynTFTSetTrackBarTickMode.  ' + IntToStr(ATrackBar^.Max) + ' = ' + IntToStr(ATrackBar^.Min));
+    {$ENDIF}
+    Exit;
+  end;
+
   APosBackup := ATrackBar^.Position;
   ComputeMinMaxTickPos(ATrackBar, MinValue, MaxValue);
   ATrackBar^.Position := APosBackup;

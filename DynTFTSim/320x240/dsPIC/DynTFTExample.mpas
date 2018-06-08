@@ -1,5 +1,8 @@
 program DynTFTExample;
 
+uses
+  DynTFTMessageBox;
+
 const HEAP_START: Word = $1600;  //make sure this is a valid address and is Word aligned !
 const HEAP_SIZE: Word = 20000;   //Make sure enough memory is allocated. See the desktop application (simulator) for guidance.
 
@@ -89,6 +92,22 @@ begin
   TP_TFT_Set_Default_Mode;
 end;
 
+
+procedure MainLoopIteration;
+begin
+  Check_TP;
+  DynTFT_GUI_LoopIteration;
+end;
+
+
+procedure HandleMessageBox(AMessageBox: PDynTFTMessageBox);
+begin
+  repeat
+    MainLoopIteration;
+  until AMessageBox^.Done;
+end;
+
+
 begin
   MM_Init;
   
@@ -97,9 +116,9 @@ begin
   TP_TFT_Set_Calibration_Consts(64, 934, 109, 875);    // Set calibration constants
 
   DynTFT_GUI_Start;
+  DynTFTMessageBoxMainLoopHandler := @HandleMessageBox; //use this if you want modal MessageBox
+  
   repeat
-    Check_TP;
-
-    DynTFT_GUI_LoopIteration;
+    MainLoopIteration;
   until False;
 end.

@@ -124,6 +124,8 @@ function DynTFTGetComponentContainerComponentType: TDynTFTComponentType;
 function DynTFTPositiveLimit(ANumber: LongInt): LongInt; //returns 0 for negative "ANumber", and returns "ANumber" for positive "ANumber"
 function DynTFTOrdBoolWord(ABool: Boolean): Word;
 
+procedure DynTFTChangeComponentPosition(AComp: PDynTFTBaseComponent; NewLeft, NewTop: TSInt);
+
 const
   //Component state constants (defined here, not in DynTFTConsts.pas)
 
@@ -162,6 +164,7 @@ const
   CWILLFOCUS = 2;
   CWILLUNFOCUS = 4;
   CPAINTAFTERFOCUS = 8;
+  CWILLDESTROY = 64; //$40
   CREJECTFOCUS = 128; //$80
 
   COUTOFMEMORYMESSAGE = 'Out of dynamic memory. If possible, please increase memory size from HEAP_SIZE constant in MemManager.';
@@ -708,6 +711,14 @@ procedure DynTFTClearComponentArea(ComponentFromArea: PDynTFTBaseComponent; ACol
 var
   x1, y1, x2, y2: Integer;
 begin
+  if ComponentFromArea = nil then
+  begin
+    {$IFDEF IsDesktop}
+      raise Exception.Create('ComponentFromArea is nil in DynTFTClearComponentArea.');
+    {$ENDIF}
+    Exit;
+  end;
+  
   DynTFT_Set_Pen(AColor, 1);
   DynTFT_Set_Brush(1, AColor, 0, 0, 0, 0);
 
@@ -1095,8 +1106,13 @@ begin
   if ABase^.BaseProps.Focused and CWILLUNFOCUS = CWILLUNFOCUS then
   begin
     ABase^.BaseProps.Focused := CUNFOCUSED;
-    OnDynTFTBaseInternalRepaint(ABase, True, CREPAINTONSTARTUP, nil);   /////////// use CREPAINTONSTARTUP until proper implementation 
+    OnDynTFTBaseInternalRepaint(ABase, True, CREPAINTONSTARTUP, nil);   /////////// use CREPAINTONSTARTUP until proper implementation
   end;
+
+  {$IFDEF RTTIREG}
+    if ABase^.BaseProps.Focused and CWILLDESTROY = CWILLDESTROY then
+      DynTFTComponent_DestroyFromReg(ABase);
+  {$ENDIF}  
 end;
 
 
@@ -1217,6 +1233,16 @@ begin
     Result := 1
   else
     Result := 0;
+end;
+
+
+procedure DynTFTChangeComponentPosition(AComp: PDynTFTBaseComponent; NewLeft, NewTop: TSInt);
+begin
+  DynTFTClearComponentAreaWithScreenColor(AComp);
+  AComp^.BaseProps.Left := NewLeft;
+  AComp^.BaseProps.Top := NewTop;
+  //DynTFTRepaintScreenComponentsFromArea(AComp);
+  OnDynTFTBaseInternalRepaint(AComp, True, CNORMALREPAINT, nil);
 end;
 
 

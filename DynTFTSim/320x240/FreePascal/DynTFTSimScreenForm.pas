@@ -71,7 +71,7 @@ var
 
 implementation
 
-{$R *.lfm}
+{$R *.frm}
 
 uses
   IniFiles, TFT, DynTFTBaseDrawing;

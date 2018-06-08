@@ -47,7 +47,11 @@ uses
 
 const
   CMaxItemItemCount = 16;
-  CMaxItemsStringLength = 19; //n * 4 - 1
+  {$IFDEF UseExternalItemsStringLength}
+    {$I ExternalItemsStringLength.inc}
+  {$ELSE}
+    CMaxItemsStringLength = 19; //n * 4 - 1
+  {$ENDIF}
   //CItemHeight = 15; //13 pixels for text and 2 pixels for box
 
 type
@@ -280,7 +284,13 @@ begin
   {$IFNDEF UseExternalItems}
     for i := 0 to CMaxItemItemCount - 1 do
       Result^.Strings[i] := '';
-  {$ENDIF}    
+  {$ENDIF}
+
+  {$IFDEF UseExternalItemsStringLength}
+    {$IFDEF IsDesktop}
+      //DynTFT_DebugConsole('Using ExternalItemsStringLength. CMaxItemsStringLength = ' + IntToStr(CMaxItemsStringLength));
+    {$ENDIF}
+  {$ENDIF}
 end;
 
 
@@ -374,7 +384,16 @@ end;
 
 
 procedure TDynTFTItems_OnDynTFTBaseInternalRepaint(ABase: PDynTFTBaseComponent; FullRepaint: Boolean; Options: TPtr; ComponentFromArea: PDynTFTBaseComponent);
-begin
+begin                                     
+  if Options = CSETSUBCOMPONENTSVISIBLEONSHOWREPAINT then
+    Exit;
+
+  if Options = CSETSUBCOMPONENTSINVISIBLEONCLEARAREAREPAINT then
+    Exit;
+
+  if Options = CREPAINTONMOUSEUP then
+    Exit;
+
   DynTFTDrawItems(PDynTFTItems(TPtrRec(ABase)), FullRepaint);
 end;
 

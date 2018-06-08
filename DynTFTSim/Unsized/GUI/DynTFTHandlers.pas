@@ -49,7 +49,8 @@ uses
   DynTFTButton, DynTFTArrowButton, DynTFTPanel, DynTFTCheckBox, DynTFTScrollBar,
   DynTFTItems, DynTFTListBox, DynTFTLabel, DynTFTRadioButton, DynTFTRadioGroup,
   DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTKeyButton,
-  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar
+  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar,
+  DynTFTMessageBox
 
   {$IFDEF IsDesktop}
     ,SysUtils, Forms
@@ -91,6 +92,8 @@ procedure VertTrackBar_OnTrackBarChange(Sender: PPtrRec);
 
 procedure ListBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
 procedure ComboBoxItemsGetItemText(AItems: PPtrRec; Index: LongInt; var ItemText: string);
+
+procedure btnMsgBox_OnMouseUpUser(Sender: PPtrRec);
 
 
 implementation
@@ -537,5 +540,30 @@ begin
     IntToStr(Index, ItemText);
   {$ENDIF}
 end;
+
+
+procedure btnMsgBox_OnMouseUpUser(Sender: PPtrRec);
+var
+  AButton: PDynTFTButton;
+  Res: Integer;
+  MBMsg, MBTitle: string;
+begin
+  AButton := PDynTFTButton(TPtrRec(Sender));
+  MBMsg := 'This is a very long messagebox';
+  MBTitle := 'MB Title fp';
+
+  {$IFDEF IsDesktop}
+    DynTFT_DebugConsole('AButton $' + IntToHex(DWord(AButton), 8) + ' before showing Messagebox');
+  {$ENDIF}
+
+  Res := DynTFTShowMessageBox(1, MBMsg, MBTitle, CDynTFT_MB_OKCANCEL);
+  //Res := DynTFTShowMessageBox(1, MBMsg, MBTitle, CDynTFT_MB_YESNO);
+
+  {$IFDEF IsDesktop}
+    DynTFT_DebugConsole('AButton $' + IntToHex(DWord(AButton), 8) + ' after closing Messagebox: ' + IntToStr(Res));
+    DynTFT_DebugConsole('');
+  {$ENDIF}
+end;
+
 
 end.

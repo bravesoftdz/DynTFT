@@ -41,7 +41,8 @@ uses
   DynTFTButton, DynTFTArrowButton, DynTFTPanel, DynTFTCheckBox, DynTFTScrollBar,
   DynTFTItems, DynTFTListBox, DynTFTLabel, DynTFTRadioButton, DynTFTRadioGroup,
   DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTKeyButton,
-  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar
+  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar,
+  DynTFTMessageBox
 
   {$IFDEF IsDesktop}
     ,SysUtils, TFT
@@ -78,6 +79,7 @@ begin
   DynTFTRegisterComboBoxEvents;             {$IFDEF IsDesktop}DynTFT_DebugConsole('ComboBox type: ' + IntToStr(DynTFTGetComboBoxComponentType));{$ENDIF}
   DynTFTRegisterTrackBarEvents;             {$IFDEF IsDesktop}DynTFT_DebugConsole('TrackBar type: ' + IntToStr(DynTFTGetTrackBarComponentType));{$ENDIF}
   DynTFTRegisterProgressBarEvents;          {$IFDEF IsDesktop}DynTFT_DebugConsole('ProgressBar type: ' + IntToStr(DynTFTGetProgressBarComponentType));{$ENDIF}
+  DynTFTRegisterMessageBoxEvents;           {$IFDEF IsDesktop}DynTFT_DebugConsole('MessageBox type: ' + IntToStr(DynTFTGetMessageBoxComponentType));{$ENDIF}
 end;
 
 
@@ -202,6 +204,7 @@ begin
   btn1^.Caption := 'Button 1';
   btn1^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
+
   Arrow1 := DynTFTArrowButton_CreateWithArrow(1, 97, 34, 20, 20, CLeftArrow);  //Screen: 1
   Arrow1^.Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
@@ -224,6 +227,7 @@ begin
   btn3^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
   btn3^.BaseProps.Enabled := 0;
 
+
   Arrow5 := DynTFTArrowButton_CreateWithArrow(1, 17, 157, 32, 36, CUpArrow);  //Screen: 1
   Arrow5^.Color := {$IFDEF IsDesktop} $00A0E632 {$ELSE} $3734 {$ENDIF};
 
@@ -240,10 +244,12 @@ begin
   btn2^.Caption := 'Button 2';
   btn2^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
 
+
   btn4 := DynTFTButton_Create(1, 89, 205, 148, 25);  //Screen: 1
   btn4^.Caption := 'Disabled Button 4';
   btn4^.Font_Color := {$IFDEF IsDesktop} $006FAD0B {$ELSE} $0D6D {$ENDIF};
   btn4^.BaseProps.Enabled := 0;
+
 
 end;
 
@@ -573,6 +579,15 @@ begin
   ProgressBar2^.Max := 10;
   ProgressBar2^.Min := 0;
   ProgressBar2^.Position := 7;
+  btnShowMessageBox := DynTFTButton_Create(6, 73, 200, 104, 25);  //Screen: 6
+  btnShowMessageBox^.Caption := 'Message Box';
+  {$IFDEF IsDesktop}
+    btnShowMessageBox^.BaseProps.OnMouseUpUser^ := btnShowMessageBox_OnMouseUpUser;
+  {$ELSE}
+    btnShowMessageBox^.BaseProps.OnMouseUpUser := @btnShowMessageBox_OnMouseUpUser;
+  {$ENDIF}
+
+
 end;
 
 

@@ -43,7 +43,7 @@ uses
   ;
 
 var
-  ATestButton, ShapesButton, SelfDestroyButton, btnCreateKeybord: PDynTFTButton;
+  ATestButton, ShapesButton, SelfDestroyButton, btnCreateKeybord, btnMsgBox: PDynTFTButton;
   ATestArrowButton: PDynTFTArrowButton;
   ATestCheckBox: PDynTFTCheckBox;
   ATestPanel: PDynTFTPanel;

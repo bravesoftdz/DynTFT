@@ -27,21 +27,9 @@
     OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 }
 
-  {$I DynTFT_SysColors\DynTFTButton_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTArrowButton_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTPanel_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTCheckBox_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTScrollBar_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTItems_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTListBox_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTLabel_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTRadioButton_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTRadioGroup_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTTabButton_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTEdit_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTKeyButton_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTVirtualKeyboard_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTTrackBar_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTProgressBar_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTScreen_SysColors.inc}
-  {$I DynTFT_SysColors\DynTFTMessageBox_SysColors.inc}
+CL_DynTFTMessageBox_LightEdge = CL_WHITE;
+CL_DynTFTMessageBox_DarkEdge = CL_GRAY;
+CL_DynTFTMessageBox_Background = CL_LIGHTGRAY;
+CL_DynTFTMessageBox_TitleBar = CL_HIGHLIGHT;
+CL_DynTFTMessageBox_MessageFont = CL_BLACK;
+CL_DynTFTMessageBox_TitleFont = CL_WHITE;

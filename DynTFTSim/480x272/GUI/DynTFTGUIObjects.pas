@@ -105,6 +105,7 @@ var
   TrackBar2: PDynTFTTrackBar;
   ProgressBar2: PDynTFTProgressBar;
   ProgressBar1: PDynTFTProgressBar;
+  btnShowMessageBox: PDynTFTButton;
 
 implementation
 

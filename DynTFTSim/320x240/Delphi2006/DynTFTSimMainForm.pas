@@ -26,6 +26,10 @@
 
 unit DynTFTSimMainForm;
 
+{$IFNDEF IsMCU}
+  {$DEFINE IsDesktop}
+{$ENDIF}
+
 interface
 
 uses
@@ -75,7 +79,7 @@ uses
     MemManager,
   {$ENDIF}
 
-  TFT, DynTFTGUI, DynTFTControls, DynTFTBaseDrawing, DynTFTUtils,
+  TFT, DynTFTGUI, DynTFTControls, DynTFTBaseDrawing, DynTFTUtils, DynTFTMessageBox,
   IniFiles, DynTFTSimScreenForm, ClipBrd;
 
 
@@ -176,10 +180,25 @@ begin
 end;
 
 
+procedure HandleMessageBox(AMessageBox: PDynTFTMessageBox);
+begin
+  repeat
+    Application.ProcessMessages;
+    Sleep(1);
+  until AMessageBox^.Done or not frmDynTFTSimMain.tmrSimulator.Enabled;
+end;
+
+
 procedure TfrmDynTFTSimMain.btnSimulateClick(Sender: TObject);
 begin
   pnlRunning.Color := clLime;
   pnlRunning.Tag := 1; //Set the color to whatever you want, but leave this tag alone!
+
+  {$IFNDEF IsDesktop}
+    {$IFNDEF IsMCU}
+       raise Exception.Create('Neither "IsDesktop" nor "IsMCU" found.'); //IsDesktop is required when assigning DynTFTMessageBoxMainLoopHandler
+    {$ENDIF}
+  {$ENDIF}
 
   btnSimulate.Enabled := False;
   lstLog.Clear;
@@ -193,7 +212,14 @@ begin
   DynTFT_Init(frmDynTFTSimScreen.trbScreenWidth.Position, frmDynTFTSimScreen.trbScreenHeight.Position);
 
   try
+    New(DynTFTMessageBoxMainLoopHandler);
     DynTFT_GUI_Start;
+    {$IFDEF IsDesktop}
+      DynTFTMessageBoxMainLoopHandler^ := HandleMessageBox;
+    {$ELSE}
+      DynTFTMessageBoxMainLoopHandler := @HandleMessageBox;
+    {$ENDIF}
+
     tmrBlinkCaret.Enabled := True;
     lstLog.Color := clWindow;
   except
@@ -209,6 +235,14 @@ end;
 procedure TfrmDynTFTSimMain.btnStopSimulatorClick(Sender: TObject);
 begin
   tmrSimulator.Enabled := False;
+
+  try
+    Dispose(DynTFTMessageBoxMainLoopHandler);
+    DynTFTMessageBoxMainLoopHandler := nil;
+  except
+    on E: Exception do
+      DynTFT_DebugConsole('Exception on disposing DynTFTMessageBoxMainLoopHandler: ' + E.Message);
+  end;
 
   if pnlRunning.Tag = 1 then
   begin

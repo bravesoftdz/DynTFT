@@ -47,6 +47,7 @@ uses
 
 const
   //Shift State constants
+  CDYNTFTSS_NONE = 0;
   CDYNTFTSS_SHIFT = 1;
   CDYNTFTSS_ALT = 2;
   CDYNTFTSS_CTRL = 4;

@@ -1,7 +1,7 @@
 object frmDynTFTSimMain: TfrmDynTFTSimMain
-  Left = 891
+  Left = 311
   Height = 358
-  Top = 309
+  Top = 268
   Width = 927
   Caption = 'DynTFT Simulator'
   ClientHeight = 358
@@ -12,7 +12,7 @@ object frmDynTFTSimMain: TfrmDynTFTSimMain
   Font.Name = 'Tahoma'
   OnClose = FormClose
   OnCreate = FormCreate
-  LCLVersion = '5.9'
+  LCLVersion = '6.3'
   object lblAllocatedMemory: TLabel
     Left = 454
     Height = 13
@@ -96,21 +96,21 @@ object frmDynTFTSimMain: TfrmDynTFTSimMain
     Enabled = False
     Interval = 10
     OnTimer = tmrStartupTimer
-    left = 768
-    top = 104
+    Left = 768
+    Top = 104
   end
   object tmrSimulator: TTimer
     Enabled = False
     Interval = 1
     OnTimer = tmrSimulatorTimer
-    left = 768
-    top = 216
+    Left = 768
+    Top = 216
   end
   object tmrBlinkCaret: TTimer
     Enabled = False
     Interval = 500
     OnTimer = tmrBlinkCaretTimer
-    left = 768
-    top = 160
+    Left = 768
+    Top = 160
   end
 end

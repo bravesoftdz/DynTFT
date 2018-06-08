@@ -41,7 +41,8 @@ uses
   DynTFTButton, DynTFTArrowButton, DynTFTPanel, DynTFTCheckBox, DynTFTScrollBar,
   DynTFTItems, DynTFTListBox, DynTFTLabel, DynTFTRadioButton, DynTFTRadioGroup,
   DynTFTTabButton, DynTFTPageControl, DynTFTEdit, DynTFTKeyButton,
-  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar
+  DynTFTVirtualKeyboard, DynTFTComboBox, DynTFTTrackBar, DynTFTProgressBar,
+  DynTFTMessageBox
 
   {$IFDEF IsDesktop}
     ,SysUtils, TFT
@@ -95,6 +96,7 @@ begin
   DynTFTRegisterComboBoxEvents;             {$IFDEF IsDesktop}DynTFT_DebugConsole('ComboBox type: ' + IntToStr(DynTFTGetComboBoxComponentType));{$ENDIF}
   DynTFTRegisterTrackBarEvents;             {$IFDEF IsDesktop}DynTFT_DebugConsole('TrackBar type: ' + IntToStr(DynTFTGetTrackBarComponentType));{$ENDIF}
   DynTFTRegisterProgressBarEvents;          {$IFDEF IsDesktop}DynTFT_DebugConsole('ProgressBar type: ' + IntToStr(DynTFTGetProgressBarComponentType));{$ENDIF}
+  DynTFTRegisterMessageBoxEvents;           {$IFDEF IsDesktop}DynTFT_DebugConsole('MessageBox type: ' + IntToStr(DynTFTGetMessageBoxComponentType));{$ENDIF}
 end;
 
 
@@ -597,6 +599,14 @@ begin
 
   ALabelV := DynTFTLabel_Create(1, 640, 648, 80, 20);
   ALabelV^.Caption := '0';
+
+  btnMsgBox := DynTFTButton_Create(1, 580, 280, 80, 20);
+  btnMsgBox^.Caption := 'MsgBox';
+  {$IFDEF IsDesktop}
+    btnMsgBox^.BaseProps.OnMouseUpUser^ := btnMsgBox_OnMouseUpUser;
+  {$ELSE}
+    btnMsgBox^.BaseProps.OnMouseUpUser := @btnMsgBox_OnMouseUpUser;
+  {$ENDIF}
 
   DynTFTRepaintScreenComponents(1, CREPAINTONSTARTUP, nil);
 end;

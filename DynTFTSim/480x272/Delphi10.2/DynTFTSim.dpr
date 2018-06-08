@@ -58,7 +58,8 @@ uses
   DynTFTGUIObjects in '..\GUI\DynTFTGUIObjects.pas',
   DynTFTHandlers in '..\GUI\DynTFTHandlers.pas',
   DynTFTProgressBar in 'D:\DynTFT\DynTFTProgressBar.pas',
-  DynTFTTrackBar in 'D:\DynTFT\DynTFTTrackBar.pas';
+  DynTFTTrackBar in 'D:\DynTFT\DynTFTTrackBar.pas',
+  DynTFTMessageBox in 'D:\DynTFT\DynTFTMessageBox.pas';
 
 {$R *.res}
 

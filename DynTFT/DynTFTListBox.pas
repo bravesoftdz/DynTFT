@@ -100,13 +100,19 @@ begin
 
   if AListBox^.BaseProps.Enabled and CENABLED = CENABLED then
   begin
-    DynTFTEnableComponent(PDynTFTBaseComponent(TPtrRec(AItems)));
-    DynTFTEnableComponent(PDynTFTBaseComponent(TPtrRec(AListBox^.VertScrollBar)));
+    if AItems^.BaseProps.Enabled and CENABLED <> CENABLED then
+      DynTFTEnableComponent(PDynTFTBaseComponent(TPtrRec(AItems)));
+
+    if AListBox^.VertScrollBar^.BaseProps.Enabled and CENABLED <> CENABLED then
+      DynTFTEnableComponent(PDynTFTBaseComponent(TPtrRec(AListBox^.VertScrollBar)));
   end
   else
   begin
-    DynTFTDisableComponent(PDynTFTBaseComponent(TPtrRec(AItems)));
-    DynTFTDisableComponent(PDynTFTBaseComponent(TPtrRec(AListBox^.VertScrollBar)));
+    if AItems^.BaseProps.Enabled and CENABLED = CENABLED then
+      DynTFTDisableComponent(PDynTFTBaseComponent(TPtrRec(AItems)));
+
+    if AListBox^.VertScrollBar^.BaseProps.Enabled and CENABLED = CENABLED then
+      DynTFTDisableComponent(PDynTFTBaseComponent(TPtrRec(AListBox^.VertScrollBar)));
   end;
     
   if FullRedraw then

@@ -48,6 +48,9 @@ uses
   ;
 
 type
+  TOnComboBoxCloseUpEvent = procedure(AComp: PPtrRec);
+  POnComboBoxCloseUpEvent = ^TOnComboBoxCloseUpEvent;
+
   TDynTFTComboBox = record
     BaseProps: TDynTFTBaseProperties;  //inherited properties from TDynTFTBaseProperties - must be the first field of this structure !!!
 
@@ -58,6 +61,8 @@ type
     ArrowButton: PDynTFTArrowButton; //this should be the last created item in the combo box, for an easy bringing these to front
     DroppedDown: Boolean;
     Editable: Boolean;
+
+    OnComboBoxCloseUp: POnComboBoxCloseUpEvent;
   end;
   PDynTFTComboBox = ^TDynTFTComboBox;
 
@@ -105,6 +110,14 @@ procedure HideListBoxAndRepaintUnderIt(AComboBox: PDynTFTComboBox);
 begin
   DynTFTHideComponent(PDynTFTBaseComponent(TPtrRec(AComboBox^.ListBox)));
   DynTFTRepaintScreenComponentsFromArea(PDynTFTBaseComponent(TPtrRec(AComboBox^.ListBox)));
+
+  {$IFDEF IsDesktop}
+    if Assigned(AComboBox^.OnComboBoxCloseUp) then
+      if Assigned(AComboBox^.OnComboBoxCloseUp^) then
+  {$ELSE}
+    if AComboBox^.OnComboBoxCloseUp <> nil then
+  {$ENDIF}
+      AComboBox^.OnComboBoxCloseUp^(PPtrRec(TPtrRec(AComboBox)));
 end;
 
 
@@ -249,7 +262,7 @@ begin
     AComboBox^.DroppedDown := False;
     HideListBoxAndRepaintUnderIt(AComboBox);
 
-    AComboBox^.ExteriorLabel^.BaseProps.Visible := AComboBox^.ListBox^.BaseProps.Visible;AComboBox^.ExteriorLabel^.BaseProps.Visible := AComboBox^.ListBox^.BaseProps.Visible;
+    AComboBox^.ExteriorLabel^.BaseProps.Visible := AComboBox^.ListBox^.BaseProps.Visible;
   end; //if is ComboBox
 end;
 
@@ -289,6 +302,10 @@ begin
   Result^.ExteriorLabel := DynTFTLabel_Create(ScreenIndex, 0, 0, 32767, 32767);     //bigger than any screen
 
   Result^.ArrowButton^.ArrowDir := CDownArrow;
+
+  {$IFDEF IsDesktop}
+    New(Result^.OnComboBoxCloseUp);
+  {$ENDIF}
   
   Result^.Edit^.BaseProps.Parent := PPtrRec(TPtrRec(Result));
   Result^.ListBox^.BaseProps.Parent := PPtrRec(TPtrRec(Result));
@@ -345,6 +362,12 @@ begin
   Result^.ArrowButton^.BaseProps.Visible := CVISIBLE;
   Result^.ExteriorLabel^.BaseProps.Visible := CHIDDEN;
   Result^.ExteriorLabel^.Color := -1;
+
+  {$IFDEF IsDesktop}
+    Result^.OnComboBoxCloseUp^ := nil;
+  {$ELSE}
+    Result^.OnComboBoxCloseUp := nil;
+  {$ENDIF}
 end;
 
 
@@ -360,6 +383,10 @@ procedure DynTFTComboBox_Destroy(var AComboBox: PDynTFTComboBox);
     ATemp: PDynTFTBaseComponent;
 {$ENDIF}
 begin
+  {$IFDEF IsDesktop}
+    Dispose(AComboBox^.OnComboBoxCloseUp);
+  {$ENDIF}
+
   {$IFDEF IsDesktop}
     DynTFTComponent_Destroy(PDynTFTBaseComponent(TPtrRec(AComboBox^.Edit)), SizeOf(AComboBox^.Edit^));
     DynTFTComponent_Destroy(PDynTFTBaseComponent(TPtrRec(AComboBox^.ListBox)), SizeOf(AComboBox^.ListBox^));

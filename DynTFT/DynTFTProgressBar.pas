@@ -99,9 +99,9 @@ begin
   TotalPositionSpace := PrbBar^.Max - PrbBar^.Min;
 
   {$IFDEF IsDesktop}
-    Result := Round(LongInt(TotalDrawSpace) * PrbBar^.Position / TotalPositionSpace);
+    Result := Round(LongInt(TotalDrawSpace) * (PrbBar^.Position - PrbBar^.Min) / TotalPositionSpace);
   {$ELSE}
-    Result := Word(Real(Real(LongInt(TotalDrawSpace)) * Real(PrbBar^.Position) / Real(TotalPositionSpace)));
+    Result := Word(Real(Real(LongInt(TotalDrawSpace)) * Real(PrbBar^.Position - PrbBar^.Min) / Real(TotalPositionSpace)));
   {$ENDIF}
 
   Result := Result + 3;  
@@ -125,6 +125,11 @@ begin
 
   if AProgressBar^.Position > AProgressBar^.Max then
     AProgressBar^.Position := AProgressBar^.Max;
+
+  {$IFDEF IsDesktop}
+    if AProgressBar^.Max < AProgressBar^.Min then
+      DynTFT_DebugConsole('AProgressBar^.Max < AProgressBar^.Min  in DynTFTDrawProgressBar.  ' + IntToStr(AProgressBar^.Max) + ' < ' + IntToStr(AProgressBar^.Min));
+  {$ENDIF}  
 
   if AProgressBar^.Orientation = CProgressBarHorizDir then
     pxy := x1 + PrbBarPosToDrawPos(AProgressBar)
@@ -152,9 +157,9 @@ begin
     DynTFT_Set_Brush(1, AProgressBar^.BackgroundColor, 0, 0, 0, 0);
 
     if AProgressBar^.Orientation = CProgressBarHorizDir then
-      DynTFT_Rectangle(pxy - 1, y1, x2 - 1, y2)
+      DynTFT_Rectangle(pxy - 1, y1 + 1, x2 - 1, y2 - 1)
     else
-      DynTFT_Rectangle(x1, y1 + 1, x2, pxy - 1);
+      DynTFT_Rectangle(x1 + 1, y1 + 1, x2 - 1, pxy - 1);
   end;
 
   DynTFT_Set_Pen(AProgressBar^.Color, 1);

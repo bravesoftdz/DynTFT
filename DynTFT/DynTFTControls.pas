@@ -149,8 +149,16 @@ begin
     Exit;
 
   MouseMoved := (DynTFTMCU_XMouse <> DynTFTMCU_OldXMouse) or (DynTFTMCU_YMouse <> DynTFTMCU_OldYMouse);
+
   repeat
     ABase := PDynTFTBaseComponent(TPtrRec(ParentComponent^.BaseComponent));
+    if ABase = nil then
+    begin
+      {$IFDEF IsDesktop}
+        DynTFT_DebugConsole('Can''t work with destroyed components in ExecuteComponentHandlers_FirstAction.');
+      {$ENDIF}
+      Break;
+    end;
 
     if ABase^.BaseProps.CanHandleMessages then
       if ABase^.BaseProps.Visible and CVISIBLE = CVISIBLE then
@@ -181,13 +189,13 @@ begin
             end
             else  //mouse is up
             begin
+              DynTFTAllComponentsContainer[ScreenIndex].SomeButtonDownScr := False;
+              
               if ComponentPressed then
               begin
                 ABase^.BaseProps.CompState := ABase^.BaseProps.CompState xor CPRESSED; //MouseIsDown
                 OnDynTFTBaseInternalMouseUp(ABase);        //this can be used for OnClick, because it is over component
               end;
-
-              DynTFTAllComponentsContainer[ScreenIndex].SomeButtonDownScr := False;
             end;
           end
           else //not  MouseOverComponent(ABase)
@@ -225,6 +233,13 @@ begin
 
     repeat
       ABase := PDynTFTBaseComponent(TPtrRec(ParentComponent^.BaseComponent));
+      if ABase = nil then
+      begin
+        {$IFDEF IsDesktop}
+          DynTFT_DebugConsole('Can''t work with destroyed components in ExecuteComponentHandlers_SecondAction.');
+        {$ENDIF}
+        Break;
+      end;
 
       if ABase^.BaseProps.CanHandleMessages then
       begin
